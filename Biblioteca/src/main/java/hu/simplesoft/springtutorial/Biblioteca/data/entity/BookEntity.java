@@ -25,7 +25,7 @@ public class BookEntity {
 	@Column(name = "title")
 	private String title;
 	
-	@ManyToOne(fetch = FetchType.LAZY)
+	@ManyToOne(fetch = FetchType.EAGER)
 	@JoinColumn(name = "authorID")
 	private AuthorEntity author;
 	

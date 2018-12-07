@@ -15,11 +15,11 @@ import javax.persistence.Table;
 @Table(name = "membership")
 public class MembershipEntity {
 
-	@OneToOne(fetch = FetchType.LAZY)
+	@OneToOne(fetch = FetchType.EAGER)
 	@JoinColumn(name = "user_id")
 	private UserEntity user;
 	
-	@OneToOne(fetch = FetchType.LAZY)
+	@OneToOne(fetch = FetchType.EAGER)
 	@JoinColumn(name = "library_id")
 	private LibraryEntity library;
 	

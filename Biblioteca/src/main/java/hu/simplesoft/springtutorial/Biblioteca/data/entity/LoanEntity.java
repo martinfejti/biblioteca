@@ -16,11 +16,11 @@ import org.springframework.lang.NonNull;
 @Table(name = "loan")
 public class LoanEntity {
 
-	@OneToOne(fetch = FetchType.LAZY)
+	@OneToOne(fetch = FetchType.EAGER)
 	@JoinColumn(name = "book_id")
 	private BookEntity book;
 	
-	@OneToOne(fetch = FetchType.LAZY)
+	@OneToOne(fetch = FetchType.EAGER)
 	@JoinColumn(name = "user_id")
 	private UserEntity user;
 	
