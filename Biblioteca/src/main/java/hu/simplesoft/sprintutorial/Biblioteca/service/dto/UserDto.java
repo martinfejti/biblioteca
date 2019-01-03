@@ -4,6 +4,7 @@ import java.util.Date;
 
 public class UserDto {
 
+	private long id;
 	private RoleDto role;
 	private String username;
 	private String email;
@@ -16,6 +17,20 @@ public class UserDto {
 	public UserDto() {
 		
 	}
+	
+	
+
+	public long getId() {
+		return id;
+	}
+
+
+
+	public void setId(long id) {
+		this.id = id;
+	}
+
+
 
 	public RoleDto getRole() {
 		return role;

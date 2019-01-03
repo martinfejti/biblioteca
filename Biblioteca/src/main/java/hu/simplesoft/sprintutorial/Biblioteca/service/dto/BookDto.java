@@ -3,6 +3,7 @@ package hu.simplesoft.sprintutorial.Biblioteca.service.dto;
 
 public class BookDto {
 
+	private long id;
 	private String title;
 	private AuthorDto author;
 	private int publishYear;
@@ -12,6 +13,20 @@ public class BookDto {
 	public BookDto() {
 		
 	}
+	
+	
+
+	public long getId() {
+		return id;
+	}
+
+
+
+	public void setId(long id) {
+		this.id = id;
+	}
+
+
 
 	public String getTitle() {
 		return title;

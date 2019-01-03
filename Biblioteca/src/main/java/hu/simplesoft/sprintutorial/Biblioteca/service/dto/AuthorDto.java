@@ -4,6 +4,7 @@ import java.util.Date;
 
 public class AuthorDto {
 
+	private long id;
 	private String name;
 	private Date birthDate;
 	private String birthPlace;
@@ -12,6 +13,20 @@ public class AuthorDto {
 	public AuthorDto() {
 		
 	}
+
+	
+	
+	public long getId() {
+		return id;
+	}
+
+
+
+	public void setId(long id) {
+		this.id = id;
+	}
+
+
 
 	public String getName() {
 		return name;

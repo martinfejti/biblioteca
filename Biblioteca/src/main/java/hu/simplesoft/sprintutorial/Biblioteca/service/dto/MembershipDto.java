@@ -4,6 +4,7 @@ import java.util.Date;
 
 public class MembershipDto {
 
+	private long id;
 	private UserDto user;
 	private LibraryDto library;
 	private Date beginningOfMembership;
@@ -11,6 +12,20 @@ public class MembershipDto {
 	public MembershipDto() {
 		
 	}
+	
+	
+
+	public long getId() {
+		return id;
+	}
+
+
+
+	public void setId(long id) {
+		this.id = id;
+	}
+
+
 
 	public UserDto getUser() {
 		return user;

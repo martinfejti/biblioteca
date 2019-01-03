@@ -2,6 +2,7 @@ package hu.simplesoft.sprintutorial.Biblioteca.service.dto;
 
 public class AddressDto {
 
+	private long id;
 	private String country;
 	private String city;
 	private String street;
@@ -10,6 +11,20 @@ public class AddressDto {
 	public AddressDto() {
 		
 	}
+	
+	
+
+	public long getId() {
+		return id;
+	}
+
+
+
+	public void setId(long id) {
+		this.id = id;
+	}
+
+
 
 	public String getCountry() {
 		return country;

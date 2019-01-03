@@ -4,6 +4,7 @@ import java.util.Date;
 
 public class LoanDto {
 
+	private long id;
 	private BookDto book;
 	private UserDto user;
 	private Date loanStartedDate;
@@ -13,6 +14,20 @@ public class LoanDto {
 	public LoanDto() {
 		
 	}
+
+	
+	
+	public long getId() {
+		return id;
+	}
+
+
+
+	public void setId(long id) {
+		this.id = id;
+	}
+
+
 
 	public BookDto getBook() {
 		return book;
