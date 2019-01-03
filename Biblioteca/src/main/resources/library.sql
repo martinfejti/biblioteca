@@ -55,6 +55,7 @@ foreign key(address_id) references address(address_id)
 );
 
 CREATE TABLE loan(
+loan_id int primary key not null;
 book_id int not null,
 user_id int not null,
 loan_started_date date not null,
@@ -65,6 +66,7 @@ foreign key(user_id) references user(user_id)
 );
 
 CREATE TABLE membership(
+membership_id int primary key not null;
 user_id int not null,
 library_id int not null,
 beginning_of_membership date,
