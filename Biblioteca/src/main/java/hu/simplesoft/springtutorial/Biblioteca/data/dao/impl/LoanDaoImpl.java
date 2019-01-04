@@ -1,0 +1,97 @@
+package hu.simplesoft.springtutorial.Biblioteca.data.dao.impl;
+
+import javax.persistence.EntityManager;
+import javax.persistence.PersistenceContext;
+import javax.transaction.Transactional;
+
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
+import org.mapstruct.factory.Mappers;
+import org.springframework.stereotype.Repository;
+
+import hu.simplesoft.springtutorial.Biblioteca.data.dao.LoanDao;
+import hu.simplesoft.springtutorial.Biblioteca.data.entity.LoanEntity;
+import hu.simplesoft.springtutorial.Biblioteca.data.mapper.LoanMapper;
+import hu.simplesoft.springtutorial.Biblioteca.data.util.Constants;
+import hu.simplesoft.sprintutorial.Biblioteca.service.dto.LoanDto;
+
+@Repository
+@Transactional
+public class LoanDaoImpl implements LoanDao{
+
+	private static final Logger LOGGER = LogManager.getLogger(LoanDaoImpl.class);
+	private static final LoanMapper LOAN_MAPPER = Mappers.getMapper(LoanMapper.class);
+	
+	@PersistenceContext
+	private EntityManager entityManager;
+	
+	@Override
+	public LoanDto getLoanById(long loanId) {
+		LoanEntity loanEntity = entityManager.find(LoanEntity.class, loanId);
+		
+		return LOAN_MAPPER.mapLoanEntityToDto(loanEntity);
+	}
+	
+	@Override
+	public boolean createLoan(LoanDto loanDto) {
+		boolean isSuccess = false;
+		LoanEntity newLoanEntity = LOAN_MAPPER.mapLoanDtoToEntity(loanDto);
+		
+		try {
+			this.entityManager.persist(newLoanEntity);
+			isSuccess = true;
+		} catch (RuntimeException e) {
+			LOGGER.error(Constants.LoanDaoErrorLogMessage.CREATE_FAILED);
+		}
+		
+		return isSuccess;
+	}
+	
+	@Override
+	public boolean updateLoan(LoanDto loanDto) {
+		boolean isSuccess = false;
+		LoanEntity loanEntityForUpdate = entityManager.find(LoanEntity.class, loanDto.getId());
+		
+		if(loanEntityForUpdate != null) {
+			loanEntityForUpdate = updateLoanEntity(loanEntityForUpdate, loanDto);
+			
+			try {
+				this.entityManager.merge(loanEntityForUpdate);
+				isSuccess = true;
+			} catch (RuntimeException e) {
+				LOGGER.error(Constants.LoanDaoErrorLogMessage.UPDATE_FAILED);
+			}
+			
+		}
+		
+		return isSuccess;
+	}
+	
+	@Override
+	public boolean deleteLoan(long loanId) {
+		boolean isSuccess = false;
+		LoanEntity loanEntityForDelete = entityManager.find(LoanEntity.class, loanId);
+		
+		try {
+			this.entityManager.remove(loanEntityForDelete);
+			isSuccess = true;
+		} catch(RuntimeException e) {
+			LOGGER.error(Constants.LoanDaoErrorLogMessage.DELETE_FAILED);
+		}
+		
+		return isSuccess;
+	}
+	
+	public LoanEntity updateLoanEntity(LoanEntity originalLoanEntity, LoanDto newLoanDto) {
+		LoanEntity newLoanEntity = LOAN_MAPPER.mapLoanDtoToEntity(newLoanDto);
+		
+		originalLoanEntity.setLoanId(newLoanEntity.getLoanId());
+		originalLoanEntity.setBook(newLoanEntity.getBook());
+		originalLoanEntity.setUser(newLoanEntity.getUser());
+		originalLoanEntity.setLoanStartedDate(newLoanEntity.getLoanStartedDate());
+		originalLoanEntity.setLoanEndsDate(newLoanEntity.getLoanEndsDate());
+		originalLoanEntity.setStatus(newLoanEntity.getStatus());
+		
+		return originalLoanEntity;
+	}
+}

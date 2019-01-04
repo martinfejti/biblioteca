@@ -45,6 +45,20 @@ public class LoanEntity {
 	public LoanEntity() {
 		
 	}
+	
+	
+
+	public long getLoanId() {
+		return loanId;
+	}
+
+
+
+	public void setLoanId(long loanId) {
+		this.loanId = loanId;
+	}
+
+
 
 	public BookEntity getBook() {
 		return book;

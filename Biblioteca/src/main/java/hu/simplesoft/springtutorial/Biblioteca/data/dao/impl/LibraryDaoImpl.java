@@ -1,0 +1,98 @@
+package hu.simplesoft.springtutorial.Biblioteca.data.dao.impl;
+
+
+import javax.persistence.EntityManager;
+import javax.persistence.PersistenceContext;
+import javax.transaction.Transactional;
+
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
+import org.mapstruct.factory.Mappers;
+import org.springframework.stereotype.Repository;
+
+import hu.simplesoft.springtutorial.Biblioteca.data.dao.LibraryDao;
+import hu.simplesoft.springtutorial.Biblioteca.data.entity.LibraryEntity;
+import hu.simplesoft.springtutorial.Biblioteca.data.mapper.LibraryMapper;
+import hu.simplesoft.springtutorial.Biblioteca.data.util.Constants;
+import hu.simplesoft.sprintutorial.Biblioteca.service.dto.LibraryDto;
+
+@Repository
+@Transactional
+public class LibraryDaoImpl implements LibraryDao{
+
+	private static final Logger LOGGER = LogManager.getLogger(LibraryDaoImpl.class);
+	private static final LibraryMapper LIBRARY_MAPPER = Mappers.getMapper(LibraryMapper.class);
+	
+	@PersistenceContext
+	private EntityManager entityManager;
+	
+	public LibraryDaoImpl() {
+		
+	}
+	
+	@Override
+	public LibraryDto getLibraryById(long libraryId) {
+		LibraryEntity libraryEntity = entityManager.find(LibraryEntity.class, libraryId);
+		
+		return LIBRARY_MAPPER.mapLibraryEntityToDto(libraryEntity);
+	}
+	
+	@Override
+	public boolean createLibrary(LibraryDto libraryDto) {
+		boolean isSuccess = false;
+		LibraryEntity newLibraryEntity = LIBRARY_MAPPER.mapLibraryDtoToEntity(libraryDto);
+		
+		try {
+			this.entityManager.persist(newLibraryEntity);
+			isSuccess = true;
+		} catch(RuntimeException e) {
+			LOGGER.error(Constants.LibraryDaoErrorMessage.CREATE_FAILED);
+		}
+		
+		return isSuccess;
+	}
+	
+	@Override
+	public boolean updateLibrary(LibraryDto libraryDto) {
+		boolean isSuccess = false;
+		LibraryEntity libraryEntityForUpdate = entityManager.find(LibraryEntity.class, libraryDto.getId());
+		
+		if(libraryEntityForUpdate != null) {
+			libraryEntityForUpdate = updateLibraryEntity(libraryEntityForUpdate, libraryDto);
+			
+			try {
+				this.entityManager.merge(libraryEntityForUpdate);
+				isSuccess = true;
+			} catch (RuntimeException e) {
+				LOGGER.error(Constants.LibraryDaoErrorMessage.UPDATE_FAILED);
+			}
+		}
+		
+		return isSuccess;
+	}
+	
+	@Override
+	public boolean deleteLibrary(long libraryId) {
+		boolean isSuccess = false;
+		LibraryEntity libraryEntityForDelete = entityManager.find(LibraryEntity.class, libraryId);
+		
+		try {
+			this.entityManager.remove(libraryEntityForDelete);
+			isSuccess = true;
+		} catch (RuntimeException e) {
+			LOGGER.error(Constants.LibraryDaoErrorMessage.DELETE_FAILED);
+		}
+		
+		return isSuccess;
+	}
+	
+	public LibraryEntity updateLibraryEntity(LibraryEntity originalLibraryEntity, LibraryDto newLibraryDto) {
+		LibraryEntity newLibraryEntity = LIBRARY_MAPPER.mapLibraryDtoToEntity(newLibraryDto);
+		
+		originalLibraryEntity.setLibraryId(newLibraryEntity.getLibraryId());
+		originalLibraryEntity.setName(newLibraryEntity.getName());
+		originalLibraryEntity.setAddress(newLibraryEntity.getAddress());
+		
+		return originalLibraryEntity;
+	}
+}

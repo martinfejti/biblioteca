@@ -37,6 +37,20 @@ public class MembershipEntity {
 	public MembershipEntity() {
 		
 	}
+	
+	
+
+	public long getMembershipId() {
+		return membershipId;
+	}
+
+
+
+	public void setMembershipId(long membershipId) {
+		this.membershipId = membershipId;
+	}
+
+
 
 	public UserEntity getUser() {
 		return user;

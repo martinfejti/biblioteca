@@ -7,5 +7,5 @@ public interface AuthorDao {
 	boolean createAuthor(AuthorDto authorDto);
 	boolean updateAuthor(AuthorDto authorDto);
 	boolean deleteAuthor(long auhtorId);
-	AuthorDto getAuthorByName(long name);
+	AuthorDto getAuthorByName(String name);
 }
