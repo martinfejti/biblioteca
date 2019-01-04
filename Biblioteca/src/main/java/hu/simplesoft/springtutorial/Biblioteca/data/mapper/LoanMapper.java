@@ -1,6 +1,9 @@
 package hu.simplesoft.springtutorial.Biblioteca.data.mapper;
 
 
+import java.util.ArrayList;
+import java.util.List;
+
 import hu.simplesoft.springtutorial.Biblioteca.data.entity.LoanEntity;
 import hu.simplesoft.sprintutorial.Biblioteca.service.dto.LoanDto;
 
@@ -34,5 +37,15 @@ public final class LoanMapper {
 		loanDto.setStatus(loanEntity.getStatus());
 		
 		return loanDto;
+	}
+	
+	public static List<LoanDto> convertListEntityToDto(List<LoanEntity> loanEntityList){
+		List<LoanDto> loanDtoList = new ArrayList<>();
+		
+		for(LoanEntity loanEntity : loanEntityList) {
+			loanDtoList.add(convertEntityToDto(loanEntity));
+		}
+		
+		return loanDtoList;
 	}
 }

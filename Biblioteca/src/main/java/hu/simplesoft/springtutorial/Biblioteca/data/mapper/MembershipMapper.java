@@ -1,6 +1,9 @@
 package hu.simplesoft.springtutorial.Biblioteca.data.mapper;
 
 
+import java.util.ArrayList;
+import java.util.List;
+
 import hu.simplesoft.springtutorial.Biblioteca.data.entity.MembershipEntity;
 import hu.simplesoft.sprintutorial.Biblioteca.service.dto.MembershipDto;
 
@@ -30,5 +33,15 @@ public final class MembershipMapper {
 		membershipDto.setLibrary(LibraryMapper.convertEntityToDto(membershipEntity.getLibrary()));
 		
 		return membershipDto;
+	}
+	
+	public static List<MembershipDto> convertListEntityToDto(List<MembershipEntity> membershipEntityList) {
+		List<MembershipDto> membershipDtoList = new ArrayList<>();
+		
+		for(MembershipEntity membershipEntity : membershipEntityList) {
+			membershipDtoList.add(convertEntityToDto(membershipEntity));
+		}
+		
+		return membershipDtoList;
 	}
 }
