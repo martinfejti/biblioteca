@@ -7,7 +7,6 @@ import javax.transaction.Transactional;
 
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
-import org.mapstruct.factory.Mappers;
 import org.springframework.stereotype.Repository;
 
 import hu.simplesoft.springtutorial.Biblioteca.data.dao.LibraryDao;
@@ -21,7 +20,6 @@ import hu.simplesoft.sprintutorial.Biblioteca.service.dto.LibraryDto;
 public class LibraryDaoImpl implements LibraryDao{
 
 	private static final Logger LOGGER = LogManager.getLogger(LibraryDaoImpl.class);
-	private static final LibraryMapper LIBRARY_MAPPER = Mappers.getMapper(LibraryMapper.class);
 	
 	@PersistenceContext
 	private EntityManager entityManager;
@@ -34,13 +32,13 @@ public class LibraryDaoImpl implements LibraryDao{
 	public LibraryDto getLibraryById(long libraryId) {
 		LibraryEntity libraryEntity = entityManager.find(LibraryEntity.class, libraryId);
 		
-		return LIBRARY_MAPPER.mapLibraryEntityToDto(libraryEntity);
+		return LibraryMapper.convertEntityToDto(libraryEntity);
 	}
 	
 	@Override
 	public boolean createLibrary(LibraryDto libraryDto) {
 		boolean isSuccess = false;
-		LibraryEntity newLibraryEntity = LIBRARY_MAPPER.mapLibraryDtoToEntity(libraryDto);
+		LibraryEntity newLibraryEntity = LibraryMapper.convertDtoToEntity(libraryDto);
 		
 		try {
 			this.entityManager.persist(newLibraryEntity);
@@ -87,7 +85,7 @@ public class LibraryDaoImpl implements LibraryDao{
 	}
 	
 	public LibraryEntity updateLibraryEntity(LibraryEntity originalLibraryEntity, LibraryDto newLibraryDto) {
-		LibraryEntity newLibraryEntity = LIBRARY_MAPPER.mapLibraryDtoToEntity(newLibraryDto);
+		LibraryEntity newLibraryEntity = LibraryMapper.convertDtoToEntity(newLibraryDto);
 		
 		originalLibraryEntity.setLibraryId(newLibraryEntity.getLibraryId());
 		originalLibraryEntity.setName(newLibraryEntity.getName());

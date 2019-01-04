@@ -6,7 +6,6 @@ import javax.transaction.Transactional;
 
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
-import org.mapstruct.factory.Mappers;
 import org.springframework.stereotype.Repository;
 
 import hu.simplesoft.springtutorial.Biblioteca.data.dao.RoleDao;
@@ -20,7 +19,6 @@ import hu.simplesoft.sprintutorial.Biblioteca.service.dto.RoleDto;
 public class RoleDaoImpl implements RoleDao{
 
 	private static final Logger LOGGER = LogManager.getLogger(RoleDaoImpl.class);
-	private static final RoleMapper ROLE_MAPPER = Mappers.getMapper(RoleMapper.class);
 	
 	@PersistenceContext
 	private EntityManager entityManager;
@@ -33,13 +31,13 @@ public class RoleDaoImpl implements RoleDao{
 	public RoleDto getRoleById(long roleId) {
 		RoleEntity roleEntity = entityManager.find(RoleEntity.class, roleId);
 		
-		return ROLE_MAPPER.mapRoleEntityToDto(roleEntity);
+		return RoleMapper.convertEntityToDto(roleEntity);
 	}
 	
 	@Override
 	public boolean createRole(RoleDto roleDto) {
 		boolean isSuccess = false;
-		RoleEntity newRoleEntity = ROLE_MAPPER.mapRoleDtoToEntity(roleDto);
+		RoleEntity newRoleEntity = RoleMapper.convertDtoToEntity(roleDto);
 		
 		try {
 			this.entityManager.persist(newRoleEntity);
@@ -86,7 +84,7 @@ public class RoleDaoImpl implements RoleDao{
 	}
 	
 	public RoleEntity updateRoleEntity(RoleEntity originalRoleEntity, RoleDto newRoleDto) {
-		RoleEntity newRoleEntity = ROLE_MAPPER.mapRoleDtoToEntity(newRoleDto);
+		RoleEntity newRoleEntity = RoleMapper.convertDtoToEntity(newRoleDto);
 		
 		originalRoleEntity.setRoleId(newRoleEntity.getRoleId());
 		originalRoleEntity.setRoleName(newRoleEntity.getRoleName());

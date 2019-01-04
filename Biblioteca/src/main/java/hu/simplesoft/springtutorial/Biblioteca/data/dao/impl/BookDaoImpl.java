@@ -6,7 +6,6 @@ import javax.transaction.Transactional;
 
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
-import org.mapstruct.factory.Mappers;
 import org.springframework.stereotype.Repository;
 
 import hu.simplesoft.springtutorial.Biblioteca.data.dao.BookDao;
@@ -20,7 +19,6 @@ import hu.simplesoft.sprintutorial.Biblioteca.service.dto.BookDto;
 public class BookDaoImpl implements BookDao{
 
 	private static final Logger LOGGER = LogManager.getLogger(BookDaoImpl.class);
-	private static final BookMapper BOOK_MAPPER = Mappers.getMapper(BookMapper.class);
 	
 	@PersistenceContext
 	private EntityManager entityManager;
@@ -33,13 +31,13 @@ public class BookDaoImpl implements BookDao{
 	public BookDto getBookByTitle(String title) {
 		BookEntity bookEntity = entityManager.find(BookEntity.class, title);
 		
-		return BOOK_MAPPER.mapBookEntityToDto(bookEntity);
+		return BookMapper.convertEntityToDto(bookEntity);
 	}
 	
 	@Override
 	public boolean createBook(BookDto bookDto) {
 		boolean isSuccess = false;
-		BookEntity newBookEntity = BOOK_MAPPER.mapBookDtoToEntity(bookDto);
+		BookEntity newBookEntity = BookMapper.convertDtoToEntity(bookDto);
 		
 		try {
 			this.entityManager.persist(newBookEntity);
@@ -86,7 +84,7 @@ public class BookDaoImpl implements BookDao{
 	}
 	
 	public BookEntity updateBookEntity(BookEntity originalBookEntity, BookDto newBookDto) {
-		BookEntity newBookEntity = BOOK_MAPPER.mapBookDtoToEntity(newBookDto);
+		BookEntity newBookEntity = BookMapper.convertDtoToEntity(newBookDto);
 		
 		originalBookEntity.setBookId(newBookEntity.getBookId());
 		originalBookEntity.setTitle(newBookEntity.getTitle());

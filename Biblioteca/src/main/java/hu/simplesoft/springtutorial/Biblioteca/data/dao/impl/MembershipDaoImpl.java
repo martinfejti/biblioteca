@@ -6,7 +6,6 @@ import javax.transaction.Transactional;
 
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
-import org.mapstruct.factory.Mappers;
 import org.springframework.stereotype.Repository;
 
 import hu.simplesoft.springtutorial.Biblioteca.data.dao.MembershipDao;
@@ -20,7 +19,6 @@ import hu.simplesoft.sprintutorial.Biblioteca.service.dto.MembershipDto;
 public class MembershipDaoImpl implements MembershipDao{
 
 	private static final Logger LOGGER = LogManager.getLogger(MembershipDaoImpl.class);
-	private static final MembershipMapper MEMBERSHIP_MAPPER = Mappers.getMapper(MembershipMapper.class);
 	
 	@PersistenceContext
 	private EntityManager entityManager;
@@ -33,13 +31,13 @@ public class MembershipDaoImpl implements MembershipDao{
 	public MembershipDto getMembershipById(long membershipId) {
 		MembershipEntity membershipEntity = entityManager.find(MembershipEntity.class, membershipId);
 		
-		return MEMBERSHIP_MAPPER.mapMembershipEntityToDto(membershipEntity);
+		return MembershipMapper.convertEntityToDto(membershipEntity);
 	}
 	
 	@Override
 	public boolean createMembership(MembershipDto membershipDto) {
 		boolean isSuccess = false;
-		MembershipEntity newMembershipEntity = MEMBERSHIP_MAPPER.mapMembershipDtoToEntity(membershipDto);
+		MembershipEntity newMembershipEntity = MembershipMapper.convertDtoToEntity(membershipDto);
 		
 		try {
 			this.entityManager.persist(newMembershipEntity);
@@ -86,7 +84,7 @@ public class MembershipDaoImpl implements MembershipDao{
 	}
 	
 	public MembershipEntity updateMembershipEntity(MembershipEntity originalMembershipEntity, MembershipDto newMembershipDto) {
-		MembershipEntity newMembershipEntity = MEMBERSHIP_MAPPER.mapMembershipDtoToEntity(newMembershipDto);
+		MembershipEntity newMembershipEntity = MembershipMapper.convertDtoToEntity(newMembershipDto);
 		
 		originalMembershipEntity.setMembershipId(newMembershipEntity.getMembershipId());
 		originalMembershipEntity.setUser(newMembershipEntity.getUser());

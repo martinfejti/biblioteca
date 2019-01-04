@@ -6,7 +6,6 @@ import javax.transaction.Transactional;
 
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
-import org.mapstruct.factory.Mappers;
 import org.springframework.stereotype.Repository;
 
 import hu.simplesoft.springtutorial.Biblioteca.data.dao.LoanDao;
@@ -20,7 +19,6 @@ import hu.simplesoft.sprintutorial.Biblioteca.service.dto.LoanDto;
 public class LoanDaoImpl implements LoanDao{
 
 	private static final Logger LOGGER = LogManager.getLogger(LoanDaoImpl.class);
-	private static final LoanMapper LOAN_MAPPER = Mappers.getMapper(LoanMapper.class);
 	
 	@PersistenceContext
 	private EntityManager entityManager;
@@ -29,13 +27,13 @@ public class LoanDaoImpl implements LoanDao{
 	public LoanDto getLoanById(long loanId) {
 		LoanEntity loanEntity = entityManager.find(LoanEntity.class, loanId);
 		
-		return LOAN_MAPPER.mapLoanEntityToDto(loanEntity);
+		return LoanMapper.convertEntityToDto(loanEntity);
 	}
 	
 	@Override
 	public boolean createLoan(LoanDto loanDto) {
 		boolean isSuccess = false;
-		LoanEntity newLoanEntity = LOAN_MAPPER.mapLoanDtoToEntity(loanDto);
+		LoanEntity newLoanEntity = LoanMapper.convertLoanDtoToEntity(loanDto);
 		
 		try {
 			this.entityManager.persist(newLoanEntity);
@@ -83,7 +81,7 @@ public class LoanDaoImpl implements LoanDao{
 	}
 	
 	public LoanEntity updateLoanEntity(LoanEntity originalLoanEntity, LoanDto newLoanDto) {
-		LoanEntity newLoanEntity = LOAN_MAPPER.mapLoanDtoToEntity(newLoanDto);
+		LoanEntity newLoanEntity = LoanMapper.convertLoanDtoToEntity(newLoanDto);
 		
 		originalLoanEntity.setLoanId(newLoanEntity.getLoanId());
 		originalLoanEntity.setBook(newLoanEntity.getBook());

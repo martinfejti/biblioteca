@@ -6,7 +6,6 @@ import javax.transaction.Transactional;
 
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
-import org.mapstruct.factory.Mappers;
 import org.springframework.stereotype.Repository;
 
 import hu.simplesoft.springtutorial.Biblioteca.data.dao.UserDao;
@@ -20,7 +19,6 @@ import hu.simplesoft.sprintutorial.Biblioteca.service.dto.UserDto;
 public class UserDaoImpl implements UserDao{
 
 	private static final Logger LOGGER = LogManager.getLogger(UserDaoImpl.class);
-	private static final UserMapper USER_MAPPER = Mappers.getMapper(UserMapper.class);
 	
 	@PersistenceContext
 	private EntityManager entityManager;
@@ -33,13 +31,13 @@ public class UserDaoImpl implements UserDao{
 	public UserDto getUserByUserName(String username) {
 		UserEntity userEntity = entityManager.find(UserEntity.class, username);
 		
-		return USER_MAPPER.mapUserEntityToDto(userEntity);
+		return UserMapper.convertEntityToDto(userEntity);
 	}
 	
 	@Override
 	public boolean createUser(UserDto userDto) {
 		boolean isSuccess = false;
-		UserEntity newUserEntity = USER_MAPPER.mapUserDtoToEntity(userDto);
+		UserEntity newUserEntity = UserMapper.convertDtoToEntity(userDto);
 		
 		try {
 			entityManager.persist(newUserEntity);
@@ -86,7 +84,7 @@ public class UserDaoImpl implements UserDao{
 	}
 	
 	public UserEntity updateUserEntity(UserEntity originalUserEntity, UserDto newUserDto) {
-		UserEntity newUserEntity = USER_MAPPER.mapUserDtoToEntity(newUserDto);
+		UserEntity newUserEntity = UserMapper.convertDtoToEntity(newUserDto);
 		
 		originalUserEntity.setUserId(newUserEntity.getUserId());
 		originalUserEntity.setRole(newUserEntity.getRole());

@@ -6,7 +6,6 @@ import javax.transaction.Transactional;
 
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
-import org.mapstruct.factory.Mappers;
 import org.springframework.stereotype.Repository;
 
 import hu.simplesoft.springtutorial.Biblioteca.data.dao.AuthorDao;
@@ -20,7 +19,6 @@ import hu.simplesoft.sprintutorial.Biblioteca.service.dto.AuthorDto;
 public class AuthorDaoImpl implements AuthorDao {
 
 	private static final Logger LOGGER = LogManager.getLogger(AuthorDaoImpl.class);
-	private static final AuthorMapper AUTHOR_MAPPER = Mappers.getMapper(AuthorMapper.class);
 	
 	@PersistenceContext
 	private EntityManager entityManager;
@@ -33,13 +31,13 @@ public class AuthorDaoImpl implements AuthorDao {
 	public AuthorDto getAuthorByName(String name) {
 		AuthorEntity foundEntity = entityManager.find(AuthorEntity.class, name);
 		
-		return AUTHOR_MAPPER.mapAuthorEntityToDto(foundEntity);
+		return AuthorMapper.convertEntityToDto(foundEntity);
 	}
 	
 	@Override
 	public boolean createAuthor(AuthorDto authorDto) {
 		boolean isSuccess = false;
-		AuthorEntity newAuthorEntity = AUTHOR_MAPPER.mapAuthorDtoToEntity(authorDto);
+		AuthorEntity newAuthorEntity = AuthorMapper.convertDtoToEntity(authorDto);
 		
 		try {
 			this.entityManager.persist(newAuthorEntity);
@@ -85,7 +83,7 @@ public class AuthorDaoImpl implements AuthorDao {
 	
 	private AuthorEntity updateAuthorEntity(AuthorEntity originalAuthorEntity, AuthorDto newAuthorDto) {
 		
-		AuthorEntity newAuthorEntity = AUTHOR_MAPPER.mapAuthorDtoToEntity(newAuthorDto);
+		AuthorEntity newAuthorEntity = AuthorMapper.convertDtoToEntity(newAuthorDto);
 		
 		originalAuthorEntity.setAuthorId(newAuthorEntity.getAuthorId());
 		originalAuthorEntity.setName(newAuthorEntity.getName());

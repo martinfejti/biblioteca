@@ -6,7 +6,6 @@ import javax.transaction.Transactional;
 
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
-import org.mapstruct.factory.Mappers;
 import org.springframework.stereotype.Repository;
 
 import hu.simplesoft.springtutorial.Biblioteca.data.dao.AddressDao;
@@ -20,7 +19,6 @@ import hu.simplesoft.sprintutorial.Biblioteca.service.dto.AddressDto;
 public class AddressDaoImpl implements AddressDao{
 
 	private static final Logger LOGGER = LogManager.getLogger(AddressDaoImpl.class);
-	private static final AddressMapper ADDRESS_MAPPER = Mappers.getMapper(AddressMapper.class);
 	
 	@PersistenceContext
 	private EntityManager entityManager;
@@ -33,13 +31,13 @@ public class AddressDaoImpl implements AddressDao{
 	public AddressDto getAddressById(long addressId) {
 		AddressEntity foundEntity = this.entityManager.find(AddressEntity.class, addressId);
 		
-		return ADDRESS_MAPPER.mapAddressEntityToDto(foundEntity);
+		return AddressMapper.convertEntityToDto(foundEntity);
 	}
 	
 	@Override
 	public boolean createAddress(AddressDto addressDto) {
 		boolean isSuccess = false;
-		AddressEntity newAddressEntity = ADDRESS_MAPPER.mapAddressDtoToEntity(addressDto);
+		AddressEntity newAddressEntity = AddressMapper.convertDtoToEntity(addressDto);
 		
 		try {
 			this.entityManager.persist(newAddressEntity);
@@ -86,7 +84,7 @@ public class AddressDaoImpl implements AddressDao{
 	}
 	
 	private AddressEntity updateAddressEntity(AddressEntity originalAddressEntity, AddressDto newAddressDto) {
-		AddressEntity newAddressEntity = ADDRESS_MAPPER.mapAddressDtoToEntity(newAddressDto);
+		AddressEntity newAddressEntity = AddressMapper.convertDtoToEntity(newAddressDto);
 		
 		originalAddressEntity.setAddressId(newAddressEntity.getAddressId());
 		originalAddressEntity.setCountry(newAddressEntity.getCountry());

@@ -1,13 +1,30 @@
 package hu.simplesoft.springtutorial.Biblioteca.data.mapper;
 
-import org.mapstruct.Mapper;
 
 import hu.simplesoft.springtutorial.Biblioteca.data.entity.RoleEntity;
 import hu.simplesoft.sprintutorial.Biblioteca.service.dto.RoleDto;
 
-@Mapper
-public abstract class RoleMapper {
+public final class RoleMapper {
 
-	public abstract RoleEntity mapRoleDtoToEntity(RoleDto roleDto);
-	public abstract RoleDto mapRoleEntityToDto(RoleEntity roleEntity);
+	private RoleMapper() {
+		
+	}
+	
+	public static RoleEntity convertDtoToEntity(RoleDto roleDto) {
+		RoleEntity roleEntity = new RoleEntity();
+		
+		roleEntity.setRoleId(roleDto.getId());
+		roleEntity.setRoleName(roleDto.getRoleName());
+		
+		return roleEntity;
+	}
+	
+	public static RoleDto convertEntityToDto(RoleEntity roleEntity) {
+		RoleDto roleDto = new RoleDto();
+		
+		roleDto.setId(roleEntity.getRoleId());
+		roleDto.setRoleName(roleEntity.getRoleName());
+		
+		return roleDto;
+	}
 }
