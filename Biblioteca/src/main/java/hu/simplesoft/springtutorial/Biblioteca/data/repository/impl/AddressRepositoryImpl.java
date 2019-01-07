@@ -19,16 +19,15 @@ public class AddressRepositoryImpl implements AddressRepository{
 	private EntityManager entityManager;
 	
 	public AddressRepositoryImpl() {
-		
 	}
 	
 	@Override
-	public AddressEntity getAddressById(long addressId) throws Exception{
+	public AddressEntity getAddressById(long addressId) throws ElementNotFoundException{
 		AddressEntity foundEntity;
 		
 		try {
 			foundEntity = this.entityManager.find(AddressEntity.class, addressId);
-		} catch (ElementNotFoundException e) {
+		} catch (RuntimeException e) {
 			throw new ElementNotFoundException("Element not found!", e);
 		}
 		
@@ -36,33 +35,33 @@ public class AddressRepositoryImpl implements AddressRepository{
 	}
 	
 	@Override
-	public void createAddress(AddressEntity addressEntity) throws Exception{
+	public void createAddress(AddressEntity addressEntity) throws PersistenceException{
 		
 		try {
 			this.entityManager.persist(addressEntity);
-		} catch (PersistenceException e) {
+		} catch (RuntimeException e) {
 			throw new PersistenceException("Create has failed!", e);
 		}
 		
 	}
 	
 	@Override
-	public void updateAddress(AddressEntity addressEntity) throws Exception{
+	public void updateAddress(AddressEntity addressEntity) throws PersistenceException{
 		
 		try {
 			this.entityManager.merge(addressEntity);
-		} catch (PersistenceException e) {
+		} catch (RuntimeException e) {
 			throw new PersistenceException("Update has failed!", e);
 		}
 		
 	}
 	
 	@Override 
-	public void deleteAddress(AddressEntity addressEntity) throws Exception{
+	public void deleteAddress(AddressEntity addressEntity) throws PersistenceException{
 		
 		try {
 			this.entityManager.remove(addressEntity);
-		} catch (PersistenceException e) {
+		} catch (RuntimeException e) {
 			throw new PersistenceException("Delete has failed!", e);
 		}
 		

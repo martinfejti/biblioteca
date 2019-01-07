@@ -1,9 +1,8 @@
 package hu.simplesoft.springtutorial.Biblioteca.data.exception;
 
-public class PersistenceException extends RuntimeException {
+public class PersistenceException extends Exception {
 
 	public PersistenceException() {
-		
 	}
 	
 	public PersistenceException(String message) {

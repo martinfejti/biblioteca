@@ -3,7 +3,6 @@ package hu.simplesoft.springtutorial.Biblioteca.data.exception;
 public class ElementNotFoundException extends PersistenceException{
 
 	public ElementNotFoundException() {
-		
 	}
 	
 	public ElementNotFoundException(String message) {

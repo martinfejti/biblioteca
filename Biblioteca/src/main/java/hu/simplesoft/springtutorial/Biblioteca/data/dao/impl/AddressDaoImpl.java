@@ -19,7 +19,6 @@ public class AddressDaoImpl implements AddressDao{
 	private EntityManager entityManager;
 	
 	public AddressDaoImpl() {
-		
 	}
 	
 	@Override
