@@ -1,4 +1,4 @@
-package hu.simplesoft.springtutorial.Biblioteca.data.repository.iface;
+package hu.simplesoft.springtutorial.Biblioteca.data.repository;
 
 import hu.simplesoft.springtutorial.Biblioteca.data.entity.AddressEntity;
 

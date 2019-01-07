@@ -7,9 +7,9 @@ import javax.transaction.Transactional;
 import org.springframework.stereotype.Repository;
 
 import hu.simplesoft.springtutorial.Biblioteca.data.entity.AddressEntity;
-import hu.simplesoft.springtutorial.Biblioteca.data.repository.iface.AddressRepository;
-import hu.simplesoft.springtutorial.Biblioteca.exception.ElementNotFoundException;
-import hu.simplesoft.springtutorial.Biblioteca.exception.PersistenceException;
+import hu.simplesoft.springtutorial.Biblioteca.data.exception.ElementNotFoundException;
+import hu.simplesoft.springtutorial.Biblioteca.data.exception.PersistenceException;
+import hu.simplesoft.springtutorial.Biblioteca.data.repository.AddressRepository;
 
 @Repository
 @Transactional
