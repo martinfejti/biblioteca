@@ -4,9 +4,9 @@ import hu.simplesoft.springtutorial.Biblioteca.data.entity.AddressEntity;
 
 public interface AddressRepository {
 
-	void createAddress(AddressEntity addressEntity);
-	void updateAddress(AddressEntity addressEntity);
-	void deleteAddress(AddressEntity addressEntity);
-	AddressEntity getAddressById(long addressId);
+	void createAddress(AddressEntity addressEntity) throws Exception;
+	void updateAddress(AddressEntity addressEntity) throws Exception;
+	void deleteAddress(AddressEntity addressEntity) throws Exception;
+	AddressEntity getAddressById(long addressId) throws Exception;
 	
 }

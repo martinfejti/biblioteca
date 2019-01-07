@@ -23,8 +23,8 @@ public class AddressRepositoryImpl implements AddressRepository{
 	}
 	
 	@Override
-	public AddressEntity getAddressById(long addressId) {
-		AddressEntity foundEntity = new AddressEntity();
+	public AddressEntity getAddressById(long addressId) throws Exception{
+		AddressEntity foundEntity;
 		
 		try {
 			foundEntity = this.entityManager.find(AddressEntity.class, addressId);
@@ -36,7 +36,7 @@ public class AddressRepositoryImpl implements AddressRepository{
 	}
 	
 	@Override
-	public void createAddress(AddressEntity addressEntity) {
+	public void createAddress(AddressEntity addressEntity) throws Exception{
 		
 		try {
 			this.entityManager.persist(addressEntity);
@@ -44,11 +44,10 @@ public class AddressRepositoryImpl implements AddressRepository{
 			throw new PersistenceException("Create has failed!", e);
 		}
 		
-		return;
 	}
 	
 	@Override
-	public void updateAddress(AddressEntity addressEntity) {
+	public void updateAddress(AddressEntity addressEntity) throws Exception{
 		
 		try {
 			this.entityManager.merge(addressEntity);
@@ -56,11 +55,10 @@ public class AddressRepositoryImpl implements AddressRepository{
 			throw new PersistenceException("Update has failed!", e);
 		}
 		
-		return;
 	}
 	
 	@Override 
-	public void deleteAddress(AddressEntity addressEntity) {
+	public void deleteAddress(AddressEntity addressEntity) throws Exception{
 		
 		try {
 			this.entityManager.remove(addressEntity);
@@ -68,7 +66,6 @@ public class AddressRepositoryImpl implements AddressRepository{
 			throw new PersistenceException("Delete has failed!", e);
 		}
 		
-		return;
 	}
 	
 }

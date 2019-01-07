@@ -1,6 +1,6 @@
 package hu.simplesoft.springtutorial.Biblioteca.exception;
 
-public class ElementNotFoundException extends RuntimeException{
+public class ElementNotFoundException extends PersistenceException{
 
 	public ElementNotFoundException() {
 		
