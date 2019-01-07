@@ -1,6 +1,9 @@
 package hu.simplesoft.springtutorial.Biblioteca.data.mapper;
 
 
+import java.util.ArrayList;
+import java.util.List;
+
 import hu.simplesoft.springtutorial.Biblioteca.data.entity.AuthorEntity;
 import hu.simplesoft.sprintutorial.Biblioteca.service.dto.AuthorDto;
 
@@ -32,5 +35,15 @@ public final class AuthorMapper {
 		authorDto.setNationality(authorEntity.getNationality());
 		
 		return authorDto;
+	}
+	
+	public static List<AuthorDto> convertListEntityToDto(List<AuthorEntity> authorEntityList){
+		List<AuthorDto> listAuthorDto = new ArrayList<>();
+		
+		for(AuthorEntity authorEntity : authorEntityList) {
+			listAuthorDto.add(convertEntityToDto(authorEntity));
+		}
+		
+		return listAuthorDto;
 	}
 }

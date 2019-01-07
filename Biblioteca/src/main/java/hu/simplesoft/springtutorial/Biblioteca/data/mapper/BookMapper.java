@@ -1,6 +1,9 @@
 package hu.simplesoft.springtutorial.Biblioteca.data.mapper;
 
 
+import java.util.ArrayList;
+import java.util.List;
+
 import hu.simplesoft.springtutorial.Biblioteca.data.entity.BookEntity;
 import hu.simplesoft.sprintutorial.Biblioteca.service.dto.BookDto;
 
@@ -35,5 +38,15 @@ public final class BookMapper {
 		
 		return bookDto;
 		
+	}
+	
+	public static List<BookDto> convertBookEntityToDto(List<BookEntity> bookEntityList){
+		List<BookDto> bookDtoList = new ArrayList<>();
+		
+		for(BookEntity bookEntity : bookEntityList) {
+			bookDtoList.add(convertEntityToDto(bookEntity));
+		}
+		
+		return bookDtoList;
 	}
 }

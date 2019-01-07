@@ -1,6 +1,9 @@
 package hu.simplesoft.springtutorial.Biblioteca.data.mapper;
 
 
+import java.util.ArrayList;
+import java.util.List;
+
 import hu.simplesoft.springtutorial.Biblioteca.data.entity.AddressEntity;
 import hu.simplesoft.sprintutorial.Biblioteca.service.dto.AddressDto;
 
@@ -32,5 +35,15 @@ public final class AddressMapper {
 		addressDto.setHouseNumber(addressEntity.getHouseNumber());
 		
 		return addressDto;
+	}
+	
+	public static List<AddressDto> convertListEntityToDto(List<AddressEntity> addressEntityList){
+		List<AddressDto> addressDtoList = new ArrayList<>();
+		
+		for(AddressEntity addressEntity : addressEntityList) {
+			addressDtoList.add(convertEntityToDto(addressEntity));
+		}
+		
+		return addressDtoList;
 	}
 }

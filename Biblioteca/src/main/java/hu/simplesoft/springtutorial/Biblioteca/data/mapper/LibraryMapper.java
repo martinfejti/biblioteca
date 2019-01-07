@@ -1,6 +1,9 @@
 package hu.simplesoft.springtutorial.Biblioteca.data.mapper;
 
 
+import java.util.ArrayList;
+import java.util.List;
+
 import hu.simplesoft.springtutorial.Biblioteca.data.entity.LibraryEntity;
 import hu.simplesoft.sprintutorial.Biblioteca.service.dto.LibraryDto;
 
@@ -28,5 +31,15 @@ public final class LibraryMapper {
 		libraryDto.setAddress(AddressMapper.convertEntityToDto(libraryEntity.getAddress()));
 		
 		return libraryDto;
+	}
+	
+	public static List<LibraryDto> convertListEntityToDto(List<LibraryEntity> libraryEntityList) {
+		List<LibraryDto> libraryDtoList = new ArrayList<>();
+		
+		for(LibraryEntity libraryEntity : libraryEntityList) {
+			libraryDtoList.add(convertEntityToDto(libraryEntity));
+		}
+		
+		return libraryDtoList;
 	}
 }
