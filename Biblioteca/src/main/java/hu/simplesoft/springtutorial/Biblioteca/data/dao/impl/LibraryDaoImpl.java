@@ -5,22 +5,17 @@ import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
 import javax.transaction.Transactional;
 
-import org.apache.logging.log4j.LogManager;
-import org.apache.logging.log4j.Logger;
 import org.springframework.stereotype.Repository;
 
 import hu.simplesoft.springtutorial.Biblioteca.data.dao.LibraryDao;
 import hu.simplesoft.springtutorial.Biblioteca.data.entity.LibraryEntity;
 import hu.simplesoft.springtutorial.Biblioteca.data.mapper.LibraryMapper;
-import hu.simplesoft.springtutorial.Biblioteca.data.util.Constants;
 import hu.simplesoft.sprintutorial.Biblioteca.service.dto.LibraryDto;
 
 @Repository
 @Transactional
 public class LibraryDaoImpl implements LibraryDao{
 
-	private static final Logger LOGGER = LogManager.getLogger(LibraryDaoImpl.class);
-	
 	@PersistenceContext
 	private EntityManager entityManager;
 	
@@ -44,7 +39,6 @@ public class LibraryDaoImpl implements LibraryDao{
 			this.entityManager.persist(newLibraryEntity);
 			isSuccess = true;
 		} catch(RuntimeException e) {
-			LOGGER.error(Constants.LibraryDaoErrorMessage.CREATE_FAILED);
 		}
 		
 		return isSuccess;
@@ -62,7 +56,6 @@ public class LibraryDaoImpl implements LibraryDao{
 				this.entityManager.merge(libraryEntityForUpdate);
 				isSuccess = true;
 			} catch (RuntimeException e) {
-				LOGGER.error(Constants.LibraryDaoErrorMessage.UPDATE_FAILED);
 			}
 		}
 		
@@ -78,7 +71,6 @@ public class LibraryDaoImpl implements LibraryDao{
 			this.entityManager.remove(libraryEntityForDelete);
 			isSuccess = true;
 		} catch (RuntimeException e) {
-			LOGGER.error(Constants.LibraryDaoErrorMessage.DELETE_FAILED);
 		}
 		
 		return isSuccess;

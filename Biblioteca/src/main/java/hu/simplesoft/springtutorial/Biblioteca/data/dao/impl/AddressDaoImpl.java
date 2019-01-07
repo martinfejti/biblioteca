@@ -4,22 +4,17 @@ import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
 import javax.transaction.Transactional;
 
-import org.apache.logging.log4j.LogManager;
-import org.apache.logging.log4j.Logger;
 import org.springframework.stereotype.Repository;
 
 import hu.simplesoft.springtutorial.Biblioteca.data.dao.AddressDao;
 import hu.simplesoft.springtutorial.Biblioteca.data.entity.AddressEntity;
 import hu.simplesoft.springtutorial.Biblioteca.data.mapper.AddressMapper;
-import hu.simplesoft.springtutorial.Biblioteca.data.util.Constants;
 import hu.simplesoft.sprintutorial.Biblioteca.service.dto.AddressDto;
 
 @Repository
 @Transactional
 public class AddressDaoImpl implements AddressDao{
 
-	private static final Logger LOGGER = LogManager.getLogger(AddressDaoImpl.class);
-	
 	@PersistenceContext
 	private EntityManager entityManager;
 	
@@ -43,7 +38,7 @@ public class AddressDaoImpl implements AddressDao{
 			this.entityManager.persist(newAddressEntity);
 			isSuccess = true;
 		} catch (RuntimeException e){
-			LOGGER.error(Constants.AddressDaoErrorLogMessages.CREATE_FAILED,e);
+			 
 		}
 		
 		return isSuccess;
@@ -61,7 +56,6 @@ public class AddressDaoImpl implements AddressDao{
 				this.entityManager.persist(addressEntityForUpdate);
 				isSuccess = true;
 			} catch (RuntimeException e) {
-				LOGGER.error(Constants.AddressDaoErrorLogMessages.UPDATE_FAILED,e);
 			}
 		}
 		
@@ -77,7 +71,6 @@ public class AddressDaoImpl implements AddressDao{
 			this.entityManager.remove(addressEntityForDelete);
 			isSuccess = true;
 		} catch (RuntimeException e) {
-			LOGGER.error(Constants.AddressDaoErrorLogMessages.DELETE_FAILED,e);
 		}
 		
 		return isSuccess;

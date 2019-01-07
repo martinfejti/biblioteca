@@ -4,22 +4,17 @@ import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
 import javax.transaction.Transactional;
 
-import org.apache.logging.log4j.LogManager;
-import org.apache.logging.log4j.Logger;
 import org.springframework.stereotype.Repository;
 
 import hu.simplesoft.springtutorial.Biblioteca.data.dao.LoanDao;
 import hu.simplesoft.springtutorial.Biblioteca.data.entity.LoanEntity;
 import hu.simplesoft.springtutorial.Biblioteca.data.mapper.LoanMapper;
-import hu.simplesoft.springtutorial.Biblioteca.data.util.Constants;
 import hu.simplesoft.sprintutorial.Biblioteca.service.dto.LoanDto;
 
 @Repository
 @Transactional
 public class LoanDaoImpl implements LoanDao{
 
-	private static final Logger LOGGER = LogManager.getLogger(LoanDaoImpl.class);
-	
 	@PersistenceContext
 	private EntityManager entityManager;
 	
@@ -39,7 +34,6 @@ public class LoanDaoImpl implements LoanDao{
 			this.entityManager.persist(newLoanEntity);
 			isSuccess = true;
 		} catch (RuntimeException e) {
-			LOGGER.error(Constants.LoanDaoErrorLogMessage.CREATE_FAILED);
 		}
 		
 		return isSuccess;
@@ -57,7 +51,6 @@ public class LoanDaoImpl implements LoanDao{
 				this.entityManager.merge(loanEntityForUpdate);
 				isSuccess = true;
 			} catch (RuntimeException e) {
-				LOGGER.error(Constants.LoanDaoErrorLogMessage.UPDATE_FAILED);
 			}
 			
 		}
@@ -74,7 +67,6 @@ public class LoanDaoImpl implements LoanDao{
 			this.entityManager.remove(loanEntityForDelete);
 			isSuccess = true;
 		} catch(RuntimeException e) {
-			LOGGER.error(Constants.LoanDaoErrorLogMessage.DELETE_FAILED);
 		}
 		
 		return isSuccess;

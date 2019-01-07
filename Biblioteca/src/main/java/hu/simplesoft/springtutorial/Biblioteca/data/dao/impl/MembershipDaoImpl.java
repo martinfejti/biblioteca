@@ -4,22 +4,17 @@ import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
 import javax.transaction.Transactional;
 
-import org.apache.logging.log4j.LogManager;
-import org.apache.logging.log4j.Logger;
 import org.springframework.stereotype.Repository;
 
 import hu.simplesoft.springtutorial.Biblioteca.data.dao.MembershipDao;
 import hu.simplesoft.springtutorial.Biblioteca.data.entity.MembershipEntity;
 import hu.simplesoft.springtutorial.Biblioteca.data.mapper.MembershipMapper;
-import hu.simplesoft.springtutorial.Biblioteca.data.util.Constants;
 import hu.simplesoft.sprintutorial.Biblioteca.service.dto.MembershipDto;
 
 @Repository
 @Transactional
 public class MembershipDaoImpl implements MembershipDao{
 
-	private static final Logger LOGGER = LogManager.getLogger(MembershipDaoImpl.class);
-	
 	@PersistenceContext
 	private EntityManager entityManager;
 	
@@ -43,7 +38,6 @@ public class MembershipDaoImpl implements MembershipDao{
 			this.entityManager.persist(newMembershipEntity);
 			isSuccess = true;
 		} catch(RuntimeException e) {
-			LOGGER.error(Constants.MembershipDaoErrorLogMessage.CREATE_FAILED);
 		}
 		
 		return isSuccess;
@@ -61,7 +55,6 @@ public class MembershipDaoImpl implements MembershipDao{
 				this.entityManager.merge(membershipEntityForUpdate);
 				isSuccess = true;
 			} catch (RuntimeException e) {
-				LOGGER.error(Constants.MembershipDaoErrorLogMessage.UPDATE_FAILED);
 			}
 		}
 		
@@ -77,7 +70,6 @@ public class MembershipDaoImpl implements MembershipDao{
 			this.entityManager.remove(membershipEntityForDelete);
 			isSuccess = true;
 		} catch(RuntimeException e) {
-			LOGGER.error(Constants.MembershipDaoErrorLogMessage.DELETE_FAILED);
 		}
 		
 		return isSuccess;

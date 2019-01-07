@@ -4,22 +4,17 @@ import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
 import javax.transaction.Transactional;
 
-import org.apache.logging.log4j.LogManager;
-import org.apache.logging.log4j.Logger;
 import org.springframework.stereotype.Repository;
 
 import hu.simplesoft.springtutorial.Biblioteca.data.dao.AuthorDao;
 import hu.simplesoft.springtutorial.Biblioteca.data.entity.AuthorEntity;
 import hu.simplesoft.springtutorial.Biblioteca.data.mapper.AuthorMapper;
-import hu.simplesoft.springtutorial.Biblioteca.data.util.Constants;
 import hu.simplesoft.sprintutorial.Biblioteca.service.dto.AuthorDto;
 
 @Repository
 @Transactional
 public class AuthorDaoImpl implements AuthorDao {
 
-	private static final Logger LOGGER = LogManager.getLogger(AuthorDaoImpl.class);
-	
 	@PersistenceContext
 	private EntityManager entityManager;
 	
@@ -43,7 +38,6 @@ public class AuthorDaoImpl implements AuthorDao {
 			this.entityManager.persist(newAuthorEntity);
 			isSuccess = true;
 		} catch (RuntimeException e) {
-			LOGGER.error(Constants.AuthorDaoErrorMessages.CREATE_FAILED,e);
 		}
 		return isSuccess;
 	}
@@ -60,7 +54,6 @@ public class AuthorDaoImpl implements AuthorDao {
 				this.entityManager.merge(newAuthorEntityForUpdate);
 				isSuccess = true;
 			} catch (RuntimeException e) {
-				LOGGER.error(Constants.AuthorDaoErrorMessages.UPDATE_FAILED, e);
 			}
 		}
 		return isSuccess;
@@ -75,7 +68,6 @@ public class AuthorDaoImpl implements AuthorDao {
 			this.entityManager.remove(authorEntityForDelete);
 			isSuccess = true;
 		} catch (RuntimeException e) {
-			LOGGER.error(Constants.AuthorDaoErrorMessages.DELETE_FAILED);
 		}
 		
 		return isSuccess;

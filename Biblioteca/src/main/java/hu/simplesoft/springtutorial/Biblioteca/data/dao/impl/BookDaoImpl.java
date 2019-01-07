@@ -4,22 +4,17 @@ import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
 import javax.transaction.Transactional;
 
-import org.apache.logging.log4j.LogManager;
-import org.apache.logging.log4j.Logger;
 import org.springframework.stereotype.Repository;
 
 import hu.simplesoft.springtutorial.Biblioteca.data.dao.BookDao;
 import hu.simplesoft.springtutorial.Biblioteca.data.entity.BookEntity;
 import hu.simplesoft.springtutorial.Biblioteca.data.mapper.BookMapper;
-import hu.simplesoft.springtutorial.Biblioteca.data.util.Constants;
 import hu.simplesoft.sprintutorial.Biblioteca.service.dto.BookDto;
 
 @Repository
 @Transactional
 public class BookDaoImpl implements BookDao{
 
-	private static final Logger LOGGER = LogManager.getLogger(BookDaoImpl.class);
-	
 	@PersistenceContext
 	private EntityManager entityManager;
 	
@@ -43,7 +38,6 @@ public class BookDaoImpl implements BookDao{
 			this.entityManager.persist(newBookEntity);
 			isSuccess = true;
 		} catch (RuntimeException e) {
-			LOGGER.error(Constants.BookDaoErrorLogMessage.CREATE_FAILED);
 		}
 		
 		return isSuccess;
@@ -61,7 +55,6 @@ public class BookDaoImpl implements BookDao{
 				this.entityManager.merge(newBookEntityForUpdate);
 				isSuccess = true;
 			} catch(RuntimeException e) {
-				LOGGER.error(Constants.BookDaoErrorLogMessage.UPDATE_FAILED);
 			}
 		}
 		
@@ -77,7 +70,6 @@ public class BookDaoImpl implements BookDao{
 			this.entityManager.remove(bookEntityForDelete);
 			isSuccess = true;
 		} catch (RuntimeException e) {
-			LOGGER.error(Constants.BookDaoErrorLogMessage.DELETE_FAILED);
 		}
 		
 		return isSuccess;

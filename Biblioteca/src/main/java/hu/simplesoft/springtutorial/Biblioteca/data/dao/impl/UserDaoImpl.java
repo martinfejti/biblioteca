@@ -4,22 +4,17 @@ import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
 import javax.transaction.Transactional;
 
-import org.apache.logging.log4j.LogManager;
-import org.apache.logging.log4j.Logger;
 import org.springframework.stereotype.Repository;
 
 import hu.simplesoft.springtutorial.Biblioteca.data.dao.UserDao;
 import hu.simplesoft.springtutorial.Biblioteca.data.entity.UserEntity;
 import hu.simplesoft.springtutorial.Biblioteca.data.mapper.UserMapper;
-import hu.simplesoft.springtutorial.Biblioteca.data.util.Constants;
 import hu.simplesoft.sprintutorial.Biblioteca.service.dto.UserDto;
 
 @Repository
 @Transactional
 public class UserDaoImpl implements UserDao{
 
-	private static final Logger LOGGER = LogManager.getLogger(UserDaoImpl.class);
-	
 	@PersistenceContext
 	private EntityManager entityManager;
 	
@@ -43,7 +38,6 @@ public class UserDaoImpl implements UserDao{
 			entityManager.persist(newUserEntity);
 			isSuccess = true;
 		} catch(RuntimeException e) {
-			LOGGER.error(Constants.UserDaoErrorLogMessage.CREATE_FAILED);
 		}
 		
 		return isSuccess;
@@ -61,7 +55,6 @@ public class UserDaoImpl implements UserDao{
 				this.entityManager.merge(userEntityForUpdate);
 				isSuccess = true;
 			} catch (RuntimeException e) {
-				LOGGER.error(Constants.UserDaoErrorLogMessage.UPDATE_FAILED);
 			}
 		}
 		
@@ -77,7 +70,6 @@ public class UserDaoImpl implements UserDao{
 			this.entityManager.remove(userEntityForDelete);
 			isSuccess = true;
 		} catch(RuntimeException e) {
-			LOGGER.error(Constants.UserDaoErrorLogMessage.DELETE_FAILED);
 		}
 		
 		return isSuccess;
