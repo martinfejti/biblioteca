@@ -4,8 +4,9 @@ import hu.simplesoft.springtutorial.Biblioteca.data.entity.AddressEntity;
 
 public interface AddressRepository {
 
-	boolean createAddress(AddressEntity addressEntity);
-	boolean updateAddress(AddressEntity addressEntity);
-	boolean deleteAddress(long addressId);
+	void createAddress(AddressEntity addressEntity);
+	void updateAddress(AddressEntity addressEntity);
+	void deleteAddress(AddressEntity addressEntity);
+	AddressEntity getAddressById(long addressId);
 	
 }

@@ -8,6 +8,8 @@ import org.springframework.stereotype.Repository;
 
 import hu.simplesoft.springtutorial.Biblioteca.data.entity.AddressEntity;
 import hu.simplesoft.springtutorial.Biblioteca.data.repository.iface.AddressRepository;
+import hu.simplesoft.springtutorial.Biblioteca.exception.ElementNotFoundException;
+import hu.simplesoft.springtutorial.Biblioteca.exception.PersistenceException;
 
 @Repository
 @Transactional
@@ -21,49 +23,52 @@ public class AddressRepositoryImpl implements AddressRepository{
 	}
 	
 	@Override
-	public boolean createAddress(AddressEntity addressEntity) {
-		boolean isSuccess = false;
+	public AddressEntity getAddressById(long addressId) {
+		AddressEntity foundEntity = new AddressEntity();
 		
 		try {
-			this.entityManager.persist(addressEntity);
-			isSuccess = true;
-		} catch (RuntimeException e) {
-			
+			foundEntity = this.entityManager.find(AddressEntity.class, addressId);
+		} catch (ElementNotFoundException e) {
+			throw new ElementNotFoundException("Element not found!", e);
 		}
 		
-		return isSuccess;
+		return foundEntity;
 	}
 	
 	@Override
-	public boolean updateAddress(AddressEntity addressEntity) {
-		boolean isSuccess = false;
+	public void createAddress(AddressEntity addressEntity) {
 		
-		addressEntity = this.entityManager.find(AddressEntity.class, addressEntity.getAddressId());
+		try {
+			this.entityManager.persist(addressEntity);
+		} catch (PersistenceException e) {
+			throw new PersistenceException("Create has failed!", e);
+		}
+		
+		return;
+	}
+	
+	@Override
+	public void updateAddress(AddressEntity addressEntity) {
 		
 		try {
 			this.entityManager.merge(addressEntity);
-			isSuccess = true;
-		} catch (RuntimeException e) {
-			
+		} catch (PersistenceException e) {
+			throw new PersistenceException("Update has failed!", e);
 		}
 		
-		return isSuccess;
+		return;
 	}
 	
 	@Override 
-	public boolean deleteAddress(long addressId) {
-		boolean isSuccess = false;
-		
-		AddressEntity addressEntity = this.entityManager.find(AddressEntity.class, addressId);
+	public void deleteAddress(AddressEntity addressEntity) {
 		
 		try {
 			this.entityManager.remove(addressEntity);
-			isSuccess = true;
-		} catch (RuntimeException e) {
-			
+		} catch (PersistenceException e) {
+			throw new PersistenceException("Delete has failed!", e);
 		}
 		
-		return isSuccess;
+		return;
 	}
 	
 }
