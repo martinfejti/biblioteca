@@ -8,9 +8,9 @@ import hu.simplesoft.sprintutorial.Biblioteca.service.dto.AddressDto;
 
 public interface AddressDao {
 
-	boolean createAddress(AddressDto addressDto) throws PersistenceException;
-	boolean updateAddress(AddressDto addressDto) throws PersistenceException;
-	boolean deleteAddress(long addressId) throws PersistenceException;
+	void createAddress(AddressDto addressDto) throws PersistenceException;
+	void updateAddress(AddressDto addressDto) throws PersistenceException;
+	void deleteAddress(long addressId) throws PersistenceException;
 	AddressDto getAddressById(long addressId) throws ElementNotFoundException;
 	List<AddressDto> getAllAddresses() throws ElementNotFoundException;
 }

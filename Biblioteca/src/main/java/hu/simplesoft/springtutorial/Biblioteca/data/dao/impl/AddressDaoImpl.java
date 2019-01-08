@@ -35,40 +35,30 @@ public class AddressDaoImpl implements AddressDao{
 	}
 	
 	@Override
-	public boolean createAddress(AddressDto addressDto) throws PersistenceException{
-		boolean isSuccess = false;
+	public void createAddress(AddressDto addressDto) throws PersistenceException{
 		AddressEntity newAddressEntity = AddressMapper.convertDtoToEntity(addressDto);
 		
 		this.addressRepository.createAddress(newAddressEntity);
-		isSuccess = true;
 		
-		return isSuccess;
 	}
 	
 	@Override
-	public boolean updateAddress(AddressDto addressDto) throws PersistenceException {
-		boolean isSuccess = false;
+	public void updateAddress(AddressDto addressDto) throws PersistenceException {
 		AddressEntity addressEntityForUpdate = this.addressRepository.getAddressById(addressDto.getId());
 		
 		if(addressEntityForUpdate != null) {
 			addressEntityForUpdate = updateAddressEntity(addressEntityForUpdate, addressDto);
 			
 			this.addressRepository.updateAddress(addressEntityForUpdate);
-			isSuccess = true;
 		}
-		
-		return isSuccess;
 	}
 	
 	@Override
-	public boolean deleteAddress(long addressId) throws PersistenceException{
-		boolean isSuccess = false;
+	public void deleteAddress(long addressId) throws PersistenceException{
 		AddressEntity addressEntityForDelete = this.addressRepository.getAddressById(addressId);
 		
 		this.addressRepository.deleteAddress(addressEntityForDelete);
-		isSuccess = true;
 		
-		return isSuccess;
 	}
 	
 	private AddressEntity updateAddressEntity(AddressEntity originalAddressEntity, AddressDto newAddressDto) {
