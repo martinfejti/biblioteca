@@ -2,8 +2,6 @@ package hu.simplesoft.springtutorial.Biblioteca.data.dao.impl;
 
 import java.util.List;
 
-import javax.persistence.PersistenceContext;
-
 import org.springframework.stereotype.Component;
 
 import hu.simplesoft.springtutorial.Biblioteca.data.dao.AddressDao;
@@ -17,7 +15,6 @@ import hu.simplesoft.sprintutorial.Biblioteca.service.dto.AddressDto;
 @Component
 public class AddressDaoImpl implements AddressDao{
 
-	@PersistenceContext
 	private AddressRepository addressRepository;
 	
 	public AddressDaoImpl() {
@@ -27,11 +24,7 @@ public class AddressDaoImpl implements AddressDao{
 	public AddressDto getAddressById(long addressId) throws ElementNotFoundException{
 		AddressEntity foundEntity;
 		
-		try {
-			foundEntity = this.addressRepository.getAddressById(addressId);
-		} catch (RuntimeException e) {
-			throw new ElementNotFoundException("Element not found!", e);
-		}
+		foundEntity = this.addressRepository.getAddressById(addressId);
 		
 		return AddressMapper.convertEntityToDto(foundEntity);
 	}
@@ -40,11 +33,7 @@ public class AddressDaoImpl implements AddressDao{
 	public List<AddressDto> getAllAddresses() throws ElementNotFoundException{
 		List<AddressEntity> addressEntityList;
 		
-		try {
-			addressEntityList = this.addressRepository.getAllAddresses();
-		} catch (RuntimeException e) {
-			throw new ElementNotFoundException("Element not found", e);
-		}
+		addressEntityList = this.addressRepository.getAllAddresses();
 		
 		return AddressMapper.convertListEntityToDto(addressEntityList);
 	}
@@ -54,12 +43,8 @@ public class AddressDaoImpl implements AddressDao{
 		boolean isSuccess = false;
 		AddressEntity newAddressEntity = AddressMapper.convertDtoToEntity(addressDto);
 		
-		try {
-			this.addressRepository.createAddress(newAddressEntity);
-			isSuccess = true;
-		} catch (RuntimeException e) {
-			throw new PersistenceException("Create has failed!", e);
-		}
+		this.addressRepository.createAddress(newAddressEntity);
+		isSuccess = true;
 		
 		return isSuccess;
 	}
@@ -72,12 +57,8 @@ public class AddressDaoImpl implements AddressDao{
 		if(addressEntityForUpdate != null) {
 			addressEntityForUpdate = updateAddressEntity(addressEntityForUpdate, addressDto);
 			
-			try {
-				this.addressRepository.updateAddress(addressEntityForUpdate);
-				isSuccess = true;
-			} catch (RuntimeException e) {
-				throw new PersistenceException("Update has failed", e);
-			}
+			this.addressRepository.updateAddress(addressEntityForUpdate);
+			isSuccess = true;
 		}
 		
 		return isSuccess;
@@ -88,12 +69,8 @@ public class AddressDaoImpl implements AddressDao{
 		boolean isSuccess = false;
 		AddressEntity addressEntityForDelete = this.addressRepository.getAddressById(addressId);
 		
-		try {
-			this.addressRepository.deleteAddress(addressEntityForDelete);
-			isSuccess = true;
-		} catch (RuntimeException e) {
-			throw new PersistenceException("Delete has failed!", e);
-		}
+		this.addressRepository.deleteAddress(addressEntityForDelete);
+		isSuccess = true;
 		
 		return isSuccess;
 	}
