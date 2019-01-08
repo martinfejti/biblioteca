@@ -1,7 +1,10 @@
 package hu.simplesoft.springtutorial.Biblioteca.data.repository.impl;
 
+import java.util.List;
+
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
+import javax.persistence.TypedQuery;
 import javax.transaction.Transactional;
 
 import org.springframework.stereotype.Repository;
@@ -32,6 +35,21 @@ public class AddressRepositoryImpl implements AddressRepository{
 		}
 		
 		return foundEntity;
+	}
+	
+	@Override
+	public List<AddressEntity> getAllAddresses() throws ElementNotFoundException{
+		List<AddressEntity> addressEntityList;
+		
+		try {
+			TypedQuery<AddressEntity> query = this.entityManager.createQuery("SELECT a FROM Address a", AddressEntity.class);
+			addressEntityList = query.getResultList();
+		} catch (RuntimeException e) {
+			throw new ElementNotFoundException("Element not found!", e);
+		}
+		
+		return addressEntityList;
+		
 	}
 	
 	@Override
