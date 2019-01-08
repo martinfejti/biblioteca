@@ -22,18 +22,14 @@ public class AddressDaoImpl implements AddressDao{
 	
 	@Override
 	public AddressDto getAddressById(long addressId) throws ElementNotFoundException{
-		AddressEntity foundEntity;
-		
-		foundEntity = this.addressRepository.getAddressById(addressId);
+		AddressEntity foundEntity = this.addressRepository.getAddressById(addressId);
 		
 		return AddressMapper.convertEntityToDto(foundEntity);
 	}
 	
 	@Override
 	public List<AddressDto> getAllAddresses() throws ElementNotFoundException{
-		List<AddressEntity> addressEntityList;
-		
-		addressEntityList = this.addressRepository.getAllAddresses();
+		List<AddressEntity> addressEntityList = this.addressRepository.getAllAddresses();
 		
 		return AddressMapper.convertListEntityToDto(addressEntityList);
 	}
