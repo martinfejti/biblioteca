@@ -2,11 +2,9 @@ package hu.simplesoft.springtutorial.Biblioteca.data.dao.impl;
 
 import java.util.List;
 
-import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
-import javax.transaction.Transactional;
 
-import org.springframework.stereotype.Repository;
+import org.springframework.stereotype.Component;
 
 import hu.simplesoft.springtutorial.Biblioteca.data.dao.AddressDao;
 import hu.simplesoft.springtutorial.Biblioteca.data.entity.AddressEntity;
@@ -16,12 +14,10 @@ import hu.simplesoft.springtutorial.Biblioteca.data.mapper.AddressMapper;
 import hu.simplesoft.springtutorial.Biblioteca.data.repository.AddressRepository;
 import hu.simplesoft.sprintutorial.Biblioteca.service.dto.AddressDto;
 
-@Repository
-@Transactional
+@Component
 public class AddressDaoImpl implements AddressDao{
 
 	@PersistenceContext
-	private EntityManager entityManager;
 	private AddressRepository addressRepository;
 	
 	public AddressDaoImpl() {
@@ -71,7 +67,7 @@ public class AddressDaoImpl implements AddressDao{
 	@Override
 	public boolean updateAddress(AddressDto addressDto) throws PersistenceException {
 		boolean isSuccess = false;
-		AddressEntity addressEntityForUpdate = entityManager.find(AddressEntity.class, addressDto.getId());
+		AddressEntity addressEntityForUpdate = this.addressRepository.getAddressById(addressDto.getId());
 		
 		if(addressEntityForUpdate != null) {
 			addressEntityForUpdate = updateAddressEntity(addressEntityForUpdate, addressDto);
@@ -90,7 +86,7 @@ public class AddressDaoImpl implements AddressDao{
 	@Override
 	public boolean deleteAddress(long addressId) throws PersistenceException{
 		boolean isSuccess = false;
-		AddressEntity addressEntityForDelete = entityManager.find(AddressEntity.class, addressId);
+		AddressEntity addressEntityForDelete = this.addressRepository.getAddressById(addressId);
 		
 		try {
 			this.addressRepository.deleteAddress(addressEntityForDelete);
