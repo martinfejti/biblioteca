@@ -1,75 +1,59 @@
 package hu.simplesoft.springtutorial.Biblioteca.data.dao.impl;
 
-import javax.persistence.EntityManager;
-import javax.persistence.PersistenceContext;
-import javax.transaction.Transactional;
+import java.util.List;
 
-import org.springframework.stereotype.Repository;
+import org.springframework.stereotype.Component;
 
 import hu.simplesoft.springtutorial.Biblioteca.data.dao.LoanDao;
 import hu.simplesoft.springtutorial.Biblioteca.data.entity.LoanEntity;
+import hu.simplesoft.springtutorial.Biblioteca.data.exception.ElementNotFoundException;
+import hu.simplesoft.springtutorial.Biblioteca.data.exception.PersistenceException;
 import hu.simplesoft.springtutorial.Biblioteca.data.mapper.LoanMapper;
+import hu.simplesoft.springtutorial.Biblioteca.data.repository.LoanRepository;
 import hu.simplesoft.sprintutorial.Biblioteca.service.dto.LoanDto;
 
-@Repository
-@Transactional
+@Component
 public class LoanDaoImpl implements LoanDao{
 
-	@PersistenceContext
-	private EntityManager entityManager;
+	private LoanRepository loanRepository;
 	
 	@Override
-	public LoanDto getLoanById(long loanId) {
-		LoanEntity loanEntity = entityManager.find(LoanEntity.class, loanId);
+	public LoanDto getLoanById(long loanId) throws ElementNotFoundException{
+		LoanEntity loanEntity = this.loanRepository.getLoanById(loanId);
 		
 		return LoanMapper.convertEntityToDto(loanEntity);
 	}
 	
 	@Override
-	public boolean createLoan(LoanDto loanDto) {
-		boolean isSuccess = false;
-		LoanEntity newLoanEntity = LoanMapper.convertLoanDtoToEntity(loanDto);
+	public List<LoanDto> getAllLoans() throws ElementNotFoundException{
+		List<LoanEntity> loanEntityList = this.loanRepository.getAllLoans();
 		
-		try {
-			this.entityManager.persist(newLoanEntity);
-			isSuccess = true;
-		} catch (RuntimeException e) {
-		}
-		
-		return isSuccess;
+		return LoanMapper.convertListEntityToDto(loanEntityList);
 	}
 	
 	@Override
-	public boolean updateLoan(LoanDto loanDto) {
-		boolean isSuccess = false;
-		LoanEntity loanEntityForUpdate = entityManager.find(LoanEntity.class, loanDto.getId());
+	public void createLoan(LoanDto loanDto) throws PersistenceException{
+		LoanEntity newLoanEntity = LoanMapper.convertLoanDtoToEntity(loanDto);
+		
+		this.loanRepository.createLoan(newLoanEntity);
+	}
+	
+	@Override
+	public void updateLoan(LoanDto loanDto) throws PersistenceException{
+		LoanEntity loanEntityForUpdate = this.loanRepository.getLoanById(loanDto.getId());
 		
 		if(loanEntityForUpdate != null) {
 			loanEntityForUpdate = updateLoanEntity(loanEntityForUpdate, loanDto);
 			
-			try {
-				this.entityManager.merge(loanEntityForUpdate);
-				isSuccess = true;
-			} catch (RuntimeException e) {
-			}
-			
+			this.loanRepository.updateLoan(loanEntityForUpdate);
 		}
-		
-		return isSuccess;
 	}
 	
 	@Override
-	public boolean deleteLoan(long loanId) {
-		boolean isSuccess = false;
-		LoanEntity loanEntityForDelete = entityManager.find(LoanEntity.class, loanId);
-		
-		try {
-			this.entityManager.remove(loanEntityForDelete);
-			isSuccess = true;
-		} catch(RuntimeException e) {
-		}
-		
-		return isSuccess;
+	public void deleteLoan(long loanId) throws PersistenceException{
+		LoanEntity loanEntityForDelete = this.loanRepository.getLoanById(loanId);
+
+		this.loanRepository.deleteLoan(loanEntityForDelete);
 	}
 	
 	public LoanEntity updateLoanEntity(LoanEntity originalLoanEntity, LoanDto newLoanDto) {

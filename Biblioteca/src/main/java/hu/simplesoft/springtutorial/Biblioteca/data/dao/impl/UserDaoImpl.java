@@ -1,78 +1,63 @@
 package hu.simplesoft.springtutorial.Biblioteca.data.dao.impl;
 
-import javax.persistence.EntityManager;
-import javax.persistence.PersistenceContext;
-import javax.transaction.Transactional;
+import java.util.List;
 
-import org.springframework.stereotype.Repository;
+import org.springframework.stereotype.Component;
 
 import hu.simplesoft.springtutorial.Biblioteca.data.dao.UserDao;
 import hu.simplesoft.springtutorial.Biblioteca.data.entity.UserEntity;
+import hu.simplesoft.springtutorial.Biblioteca.data.exception.ElementNotFoundException;
+import hu.simplesoft.springtutorial.Biblioteca.data.exception.PersistenceException;
 import hu.simplesoft.springtutorial.Biblioteca.data.mapper.UserMapper;
+import hu.simplesoft.springtutorial.Biblioteca.data.repository.UserRepository;
 import hu.simplesoft.sprintutorial.Biblioteca.service.dto.UserDto;
 
-@Repository
-@Transactional
+@Component
 public class UserDaoImpl implements UserDao{
 
-	@PersistenceContext
-	private EntityManager entityManager;
+	private UserRepository userRepository;
 	
 	public UserDaoImpl() {
 		
 	}
 	
 	@Override
-	public UserDto getUserByUserName(String username) {
-		UserEntity userEntity = entityManager.find(UserEntity.class, username);
+	public UserDto getUserById(long userId) throws ElementNotFoundException{
+		UserEntity userEntity = this.userRepository.getUserById(userId);
 		
 		return UserMapper.convertEntityToDto(userEntity);
 	}
 	
 	@Override
-	public boolean createUser(UserDto userDto) {
-		boolean isSuccess = false;
-		UserEntity newUserEntity = UserMapper.convertDtoToEntity(userDto);
+	public List<UserDto> getAllUsers() throws ElementNotFoundException{
+		List<UserEntity> userEntityList = this.userRepository.getAllUsers();
 		
-		try {
-			entityManager.persist(newUserEntity);
-			isSuccess = true;
-		} catch(RuntimeException e) {
-		}
-		
-		return isSuccess;
+		return UserMapper.convertListEntityToDto(userEntityList);
 	}
 	
 	@Override
-	public boolean updateUser(UserDto userDto) {
-		boolean isSuccess = false;
-		UserEntity userEntityForUpdate = entityManager.find(UserEntity.class, userDto.getId());
+	public void createUser(UserDto userDto) throws PersistenceException{
+		UserEntity newUserEntity = UserMapper.convertDtoToEntity(userDto);
+
+		this.userRepository.createUser(newUserEntity);
+	}
+	
+	@Override
+	public void updateUser(UserDto userDto) throws PersistenceException{
+		UserEntity userEntityForUpdate = this.userRepository.getUserById(userDto.getId());
 		
 		if(userEntityForUpdate != null) {
 			userEntityForUpdate = updateUserEntity(userEntityForUpdate, userDto);
-			
-			try {
-				this.entityManager.merge(userEntityForUpdate);
-				isSuccess = true;
-			} catch (RuntimeException e) {
-			}
+
+			this.userRepository.updateUser(userEntityForUpdate);
 		}
-		
-		return isSuccess;
 	}
 	
 	@Override
-	public boolean deleteUser(long userId) {
-		boolean isSuccess = false;
-		UserEntity userEntityForDelete = entityManager.find(UserEntity.class, userId);
-		
-		try {
-			this.entityManager.remove(userEntityForDelete);
-			isSuccess = true;
-		} catch(RuntimeException e) {
-		}
-		
-		return isSuccess;
+	public void deleteUser(long userId) throws PersistenceException{
+		UserEntity userEntityForDelete = this.userRepository.getUserById(userId);
+
+		this.userRepository.deleteUser(userEntityForDelete);
 	}
 	
 	public UserEntity updateUserEntity(UserEntity originalUserEntity, UserDto newUserDto) {

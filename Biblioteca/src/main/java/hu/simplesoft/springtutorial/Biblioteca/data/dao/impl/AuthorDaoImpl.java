@@ -1,76 +1,63 @@
 package hu.simplesoft.springtutorial.Biblioteca.data.dao.impl;
 
-import javax.persistence.EntityManager;
-import javax.persistence.PersistenceContext;
-import javax.transaction.Transactional;
+import java.util.List;
 
-import org.springframework.stereotype.Repository;
+import org.springframework.stereotype.Component;
 
 import hu.simplesoft.springtutorial.Biblioteca.data.dao.AuthorDao;
 import hu.simplesoft.springtutorial.Biblioteca.data.entity.AuthorEntity;
+import hu.simplesoft.springtutorial.Biblioteca.data.exception.ElementNotFoundException;
+import hu.simplesoft.springtutorial.Biblioteca.data.exception.PersistenceException;
 import hu.simplesoft.springtutorial.Biblioteca.data.mapper.AuthorMapper;
+import hu.simplesoft.springtutorial.Biblioteca.data.repository.AuthorRepository;
 import hu.simplesoft.sprintutorial.Biblioteca.service.dto.AuthorDto;
 
-@Repository
-@Transactional
+@Component
 public class AuthorDaoImpl implements AuthorDao {
 
-	@PersistenceContext
-	private EntityManager entityManager;
+	private AuthorRepository authorRepository;
 	
 	public AuthorDaoImpl() {
 		
 	}
 	
 	@Override
-	public AuthorDto getAuthorByName(String name) {
-		AuthorEntity foundEntity = entityManager.find(AuthorEntity.class, name);
+	public AuthorDto getAuthorById(long authorId) throws ElementNotFoundException{
+		AuthorEntity foundEntity = this.authorRepository.getAuthorById(authorId);
 		
 		return AuthorMapper.convertEntityToDto(foundEntity);
 	}
 	
 	@Override
-	public boolean createAuthor(AuthorDto authorDto) {
-		boolean isSuccess = false;
-		AuthorEntity newAuthorEntity = AuthorMapper.convertDtoToEntity(authorDto);
+	public List<AuthorDto> getAllAuthors() throws ElementNotFoundException{
+		List<AuthorEntity> authorEntityList = this.authorRepository.getAllAuthors();
 		
-		try {
-			this.entityManager.persist(newAuthorEntity);
-			isSuccess = true;
-		} catch (RuntimeException e) {
-		}
-		return isSuccess;
+		return AuthorMapper.convertListEntityToDto(authorEntityList);
 	}
 	
 	@Override
-	public boolean updateAuthor(AuthorDto authorDto) {
-		boolean isSuccess = false;
-		AuthorEntity newAuthorEntityForUpdate = entityManager.find(AuthorEntity.class, authorDto.getId());
+	public void createAuthor(AuthorDto authorDto) throws PersistenceException{
+		AuthorEntity newAuthorEntity = AuthorMapper.convertDtoToEntity(authorDto);
+		
+		this.authorRepository.createAuthor(newAuthorEntity);
+	}
+	
+	@Override
+	public void updateAuthor(AuthorDto authorDto) throws PersistenceException{
+		AuthorEntity newAuthorEntityForUpdate = this.authorRepository.getAuthorById(authorDto.getId());
 		
 		if(newAuthorEntityForUpdate != null) {
 			newAuthorEntityForUpdate = updateAuthorEntity(newAuthorEntityForUpdate, authorDto);
 			
-			try {
-				this.entityManager.merge(newAuthorEntityForUpdate);
-				isSuccess = true;
-			} catch (RuntimeException e) {
-			}
+			this.authorRepository.updateAuthor(newAuthorEntityForUpdate);
 		}
-		return isSuccess;
 	}
 	
 	@Override
-	public boolean deleteAuthor(long authorId) {
-		boolean isSuccess = false;
-		AuthorEntity authorEntityForDelete = entityManager.find(AuthorEntity.class, authorId);
+	public void deleteAuthor(long authorId) throws PersistenceException{
+		AuthorEntity authorEntityForDelete = this.authorRepository.getAuthorById(authorId);
 		
-		try {
-			this.entityManager.remove(authorEntityForDelete);
-			isSuccess = true;
-		} catch (RuntimeException e) {
-		}
-		
-		return isSuccess;
+		this.authorRepository.deleteAuthor(authorEntityForDelete);
 	}
 	
 	private AuthorEntity updateAuthorEntity(AuthorEntity originalAuthorEntity, AuthorDto newAuthorDto) {

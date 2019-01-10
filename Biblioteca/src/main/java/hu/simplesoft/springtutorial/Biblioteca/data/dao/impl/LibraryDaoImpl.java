@@ -1,79 +1,63 @@
 package hu.simplesoft.springtutorial.Biblioteca.data.dao.impl;
 
 
-import javax.persistence.EntityManager;
-import javax.persistence.PersistenceContext;
-import javax.transaction.Transactional;
+import java.util.List;
 
-import org.springframework.stereotype.Repository;
+import org.springframework.stereotype.Component;
 
 import hu.simplesoft.springtutorial.Biblioteca.data.dao.LibraryDao;
 import hu.simplesoft.springtutorial.Biblioteca.data.entity.LibraryEntity;
+import hu.simplesoft.springtutorial.Biblioteca.data.exception.ElementNotFoundException;
+import hu.simplesoft.springtutorial.Biblioteca.data.exception.PersistenceException;
 import hu.simplesoft.springtutorial.Biblioteca.data.mapper.LibraryMapper;
+import hu.simplesoft.springtutorial.Biblioteca.data.repository.LibraryRepository;
 import hu.simplesoft.sprintutorial.Biblioteca.service.dto.LibraryDto;
 
-@Repository
-@Transactional
+@Component
 public class LibraryDaoImpl implements LibraryDao{
 
-	@PersistenceContext
-	private EntityManager entityManager;
+	private LibraryRepository libraryRepository;
 	
 	public LibraryDaoImpl() {
-		
 	}
 	
 	@Override
-	public LibraryDto getLibraryById(long libraryId) {
-		LibraryEntity libraryEntity = entityManager.find(LibraryEntity.class, libraryId);
+	public LibraryDto getLibraryById(long libraryId) throws ElementNotFoundException{
+		LibraryEntity libraryEntity = this.libraryRepository.getLibraryById(libraryId);
 		
 		return LibraryMapper.convertEntityToDto(libraryEntity);
 	}
 	
 	@Override
-	public boolean createLibrary(LibraryDto libraryDto) {
-		boolean isSuccess = false;
-		LibraryEntity newLibraryEntity = LibraryMapper.convertDtoToEntity(libraryDto);
+	public List<LibraryDto> getAllLibraries() throws ElementNotFoundException{
+		List<LibraryEntity> libraryEntityList = this.libraryRepository.getAllLibraries();
 		
-		try {
-			this.entityManager.persist(newLibraryEntity);
-			isSuccess = true;
-		} catch(RuntimeException e) {
-		}
-		
-		return isSuccess;
+		return LibraryMapper.convertListEntityToDto(libraryEntityList);
 	}
 	
 	@Override
-	public boolean updateLibrary(LibraryDto libraryDto) {
-		boolean isSuccess = false;
-		LibraryEntity libraryEntityForUpdate = entityManager.find(LibraryEntity.class, libraryDto.getId());
+	public void createLibrary(LibraryDto libraryDto) throws PersistenceException{
+		LibraryEntity newLibraryEntity = LibraryMapper.convertDtoToEntity(libraryDto);
+
+		this.libraryRepository.createLibrary(newLibraryEntity);
+	}
+	
+	@Override
+	public void updateLibrary(LibraryDto libraryDto) throws PersistenceException{
+		LibraryEntity libraryEntityForUpdate = this.libraryRepository.getLibraryById(libraryDto.getId());
 		
 		if(libraryEntityForUpdate != null) {
 			libraryEntityForUpdate = updateLibraryEntity(libraryEntityForUpdate, libraryDto);
 			
-			try {
-				this.entityManager.merge(libraryEntityForUpdate);
-				isSuccess = true;
-			} catch (RuntimeException e) {
-			}
+			this.libraryRepository.updateLibrary(libraryEntityForUpdate);
 		}
-		
-		return isSuccess;
 	}
 	
 	@Override
-	public boolean deleteLibrary(long libraryId) {
-		boolean isSuccess = false;
-		LibraryEntity libraryEntityForDelete = entityManager.find(LibraryEntity.class, libraryId);
+	public void deleteLibrary(long libraryId) throws PersistenceException{
+		LibraryEntity libraryEntityForDelete = this.libraryRepository.getLibraryById(libraryId);
 		
-		try {
-			this.entityManager.remove(libraryEntityForDelete);
-			isSuccess = true;
-		} catch (RuntimeException e) {
-		}
-		
-		return isSuccess;
+		this.libraryRepository.deleteLibrary(libraryEntityForDelete);
 	}
 	
 	public LibraryEntity updateLibraryEntity(LibraryEntity originalLibraryEntity, LibraryDto newLibraryDto) {

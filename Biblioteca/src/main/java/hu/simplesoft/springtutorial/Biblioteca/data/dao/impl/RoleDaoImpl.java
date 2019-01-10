@@ -1,78 +1,62 @@
 package hu.simplesoft.springtutorial.Biblioteca.data.dao.impl;
 
-import javax.persistence.EntityManager;
-import javax.persistence.PersistenceContext;
-import javax.transaction.Transactional;
+import java.util.List;
 
-import org.springframework.stereotype.Repository;
+import org.springframework.stereotype.Component;
 
 import hu.simplesoft.springtutorial.Biblioteca.data.dao.RoleDao;
 import hu.simplesoft.springtutorial.Biblioteca.data.entity.RoleEntity;
+import hu.simplesoft.springtutorial.Biblioteca.data.exception.ElementNotFoundException;
+import hu.simplesoft.springtutorial.Biblioteca.data.exception.PersistenceException;
 import hu.simplesoft.springtutorial.Biblioteca.data.mapper.RoleMapper;
+import hu.simplesoft.springtutorial.Biblioteca.data.repository.RoleRepository;
 import hu.simplesoft.sprintutorial.Biblioteca.service.dto.RoleDto;
 
-@Repository
-@Transactional
+@Component
 public class RoleDaoImpl implements RoleDao{
 
-	@PersistenceContext
-	private EntityManager entityManager;
+	private RoleRepository roleRepository;
 	
 	public RoleDaoImpl() {
-		
 	}
 	
 	@Override
-	public RoleDto getRoleById(long roleId) {
-		RoleEntity roleEntity = entityManager.find(RoleEntity.class, roleId);
+	public RoleDto getRoleById(long roleId) throws ElementNotFoundException{
+		RoleEntity roleEntity = this.roleRepository.getRoleById(roleId);
 		
 		return RoleMapper.convertEntityToDto(roleEntity);
 	}
 	
 	@Override
-	public boolean createRole(RoleDto roleDto) {
-		boolean isSuccess = false;
-		RoleEntity newRoleEntity = RoleMapper.convertDtoToEntity(roleDto);
+	public List<RoleDto> getAllRoles() throws ElementNotFoundException{
+		List<RoleEntity> roleEntityList = this.roleRepository.getAllRoles();
 		
-		try {
-			this.entityManager.persist(newRoleEntity);
-			isSuccess = true;
-		} catch (RuntimeException e) {
-		}
-		
-		return isSuccess;
+		return RoleMapper.convertListEntityToDto(roleEntityList);
 	}
 	
 	@Override
-	public boolean updateRole(RoleDto roleDto) {
-		boolean isSuccess = false;
-		RoleEntity roleEntityForUpdate = entityManager.find(RoleEntity.class, roleDto.getId());
+	public void createRole(RoleDto roleDto) throws PersistenceException{
+		RoleEntity newRoleEntity = RoleMapper.convertDtoToEntity(roleDto);
+		
+		this.roleRepository.createRole(newRoleEntity);
+	}
+	
+	@Override
+	public void updateRole(RoleDto roleDto) throws PersistenceException{
+		RoleEntity roleEntityForUpdate = this.roleRepository.getRoleById(roleDto.getId());
 		
 		if(roleEntityForUpdate != null) {
 			roleEntityForUpdate = updateRoleEntity(roleEntityForUpdate, roleDto);
-			
-			try {
-				this.entityManager.merge(roleEntityForUpdate);
-				isSuccess = true;
-			} catch (RuntimeException e) {
-			}
+
+			this.roleRepository.updateRole(roleEntityForUpdate);
 		}
-		
-		return isSuccess;
 	}
 	
 	@Override
-	public boolean deleteRole(long roleId) {
-		boolean isSuccess = false;
-		RoleEntity roleEntityForDelete = entityManager.find(RoleEntity.class, roleId);
-		
-		try {
-			this.entityManager.remove(roleEntityForDelete);
-			isSuccess = true;
-		} catch (RuntimeException e) {
-		}
-		
-		return isSuccess;
+	public void deleteRole(long roleId) throws PersistenceException{
+		RoleEntity roleEntityForDelete = this.roleRepository.getRoleById(roleId);
+
+		this.roleRepository.deleteRole(roleEntityForDelete);
 	}
 	
 	public RoleEntity updateRoleEntity(RoleEntity originalRoleEntity, RoleDto newRoleDto) {

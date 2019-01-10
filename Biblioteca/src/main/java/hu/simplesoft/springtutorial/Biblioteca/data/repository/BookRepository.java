@@ -12,6 +12,6 @@ public interface BookRepository {
 	void updateBook(BookEntity bookEntity) throws PersistenceException;
 	void deleteBook(BookEntity bookEntity) throws PersistenceException;
 	BookEntity getBookById(long id) throws ElementNotFoundException;
-	List<BookEntity> getAllBook() throws ElementNotFoundException;
+	List<BookEntity> getAllBooks() throws ElementNotFoundException;
 	
 }

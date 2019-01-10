@@ -40,7 +40,7 @@ public final class BookMapper {
 		
 	}
 	
-	public static List<BookDto> convertBookEntityToDto(List<BookEntity> bookEntityList){
+	public static List<BookDto> convertListEntityToDto(List<BookEntity> bookEntityList){
 		List<BookDto> bookDtoList = new ArrayList<>();
 		
 		for(BookEntity bookEntity : bookEntityList) {

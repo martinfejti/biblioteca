@@ -1,78 +1,63 @@
 package hu.simplesoft.springtutorial.Biblioteca.data.dao.impl;
 
-import javax.persistence.EntityManager;
-import javax.persistence.PersistenceContext;
-import javax.transaction.Transactional;
+import java.util.List;
 
-import org.springframework.stereotype.Repository;
+import org.springframework.stereotype.Component;
 
 import hu.simplesoft.springtutorial.Biblioteca.data.dao.BookDao;
 import hu.simplesoft.springtutorial.Biblioteca.data.entity.BookEntity;
+import hu.simplesoft.springtutorial.Biblioteca.data.exception.ElementNotFoundException;
+import hu.simplesoft.springtutorial.Biblioteca.data.exception.PersistenceException;
 import hu.simplesoft.springtutorial.Biblioteca.data.mapper.BookMapper;
+import hu.simplesoft.springtutorial.Biblioteca.data.repository.BookRepository;
 import hu.simplesoft.sprintutorial.Biblioteca.service.dto.BookDto;
 
-@Repository
-@Transactional
+@Component
 public class BookDaoImpl implements BookDao{
 
-	@PersistenceContext
-	private EntityManager entityManager;
+	private BookRepository bookRepository;
 	
 	public BookDaoImpl() {
-		
 	}
 	
 	@Override
-	public BookDto getBookByTitle(String title) {
-		BookEntity bookEntity = entityManager.find(BookEntity.class, title);
+	public BookDto getBookById(long bookId) throws ElementNotFoundException{
+		BookEntity bookEntity = this.bookRepository.getBookById(bookId);
 		
 		return BookMapper.convertEntityToDto(bookEntity);
 	}
 	
 	@Override
-	public boolean createBook(BookDto bookDto) {
-		boolean isSuccess = false;
-		BookEntity newBookEntity = BookMapper.convertDtoToEntity(bookDto);
+	public List<BookDto> getAllBooks() throws ElementNotFoundException{
+		List<BookEntity> bookEntityList = this.bookRepository.getAllBooks();
 		
-		try {
-			this.entityManager.persist(newBookEntity);
-			isSuccess = true;
-		} catch (RuntimeException e) {
-		}
-		
-		return isSuccess;
+		return BookMapper.convertListEntityToDto(bookEntityList);
 	}
 	
 	@Override
-	public boolean updateBook(BookDto bookDto) {
-		boolean isSuccess = false;
-		BookEntity newBookEntityForUpdate = entityManager.find(BookEntity.class, bookDto.getId());
+	public void createBook(BookDto bookDto) throws PersistenceException{
+		BookEntity newBookEntity = BookMapper.convertDtoToEntity(bookDto);
+
+		this.bookRepository.createBook(newBookEntity);
+	}
+	
+	@Override
+	public void updateBook(BookDto bookDto) throws PersistenceException{
+		BookEntity newBookEntityForUpdate = this.bookRepository.getBookById(bookDto.getId());
 		
 		if(newBookEntityForUpdate != null) {
 			newBookEntityForUpdate = updateBookEntity(newBookEntityForUpdate, bookDto);
 			
-			try {
-				this.entityManager.merge(newBookEntityForUpdate);
-				isSuccess = true;
-			} catch(RuntimeException e) {
-			}
+			this.bookRepository.updateBook(newBookEntityForUpdate);
 		}
-		
-		return isSuccess;
 	}
 	
 	@Override
-	public boolean deleteBook(long bookId) {
-		boolean isSuccess = false;
-		BookEntity bookEntityForDelete = entityManager.find(BookEntity.class, bookId);
+	public void deleteBook(long bookId) throws PersistenceException{
+		BookEntity bookEntityForDelete = this.bookRepository.getBookById(bookId);
 		
-		try {
-			this.entityManager.remove(bookEntityForDelete);
-			isSuccess = true;
-		} catch (RuntimeException e) {
-		}
+		this.bookRepository.deleteBook(bookEntityForDelete);
 		
-		return isSuccess;
 	}
 	
 	public BookEntity updateBookEntity(BookEntity originalBookEntity, BookDto newBookDto) {

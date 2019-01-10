@@ -1,78 +1,64 @@
 package hu.simplesoft.springtutorial.Biblioteca.data.dao.impl;
 
-import javax.persistence.EntityManager;
-import javax.persistence.PersistenceContext;
-import javax.transaction.Transactional;
+import java.util.List;
 
-import org.springframework.stereotype.Repository;
+import org.springframework.stereotype.Component;
 
 import hu.simplesoft.springtutorial.Biblioteca.data.dao.MembershipDao;
 import hu.simplesoft.springtutorial.Biblioteca.data.entity.MembershipEntity;
+import hu.simplesoft.springtutorial.Biblioteca.data.exception.ElementNotFoundException;
+import hu.simplesoft.springtutorial.Biblioteca.data.exception.PersistenceException;
 import hu.simplesoft.springtutorial.Biblioteca.data.mapper.MembershipMapper;
+import hu.simplesoft.springtutorial.Biblioteca.data.repository.MembershipRepository;
 import hu.simplesoft.sprintutorial.Biblioteca.service.dto.MembershipDto;
 
-@Repository
-@Transactional
+@Component
 public class MembershipDaoImpl implements MembershipDao{
 
-	@PersistenceContext
-	private EntityManager entityManager;
+	private MembershipRepository membershipRepository;
 	
 	public MembershipDaoImpl() {
-		
 	}
 	
 	@Override
-	public MembershipDto getMembershipById(long membershipId) {
-		MembershipEntity membershipEntity = entityManager.find(MembershipEntity.class, membershipId);
+	public MembershipDto getMembershipById(long membershipId) throws ElementNotFoundException{
+		MembershipEntity membershipEntity = this.membershipRepository.getMembershipById(membershipId);
 		
 		return MembershipMapper.convertEntityToDto(membershipEntity);
 	}
 	
 	@Override
-	public boolean createMembership(MembershipDto membershipDto) {
-		boolean isSuccess = false;
-		MembershipEntity newMembershipEntity = MembershipMapper.convertDtoToEntity(membershipDto);
+	public List<MembershipDto> getAllMemberships() throws ElementNotFoundException{
+		List<MembershipEntity> membershipEntityList = this.membershipRepository.getAllMemberships();
 		
-		try {
-			this.entityManager.persist(newMembershipEntity);
-			isSuccess = true;
-		} catch(RuntimeException e) {
-		}
-		
-		return isSuccess;
+		return MembershipMapper.convertListEntityToDto(membershipEntityList);
 	}
 	
 	@Override
-	public boolean updateMembership(MembershipDto membershipDto) {
-		boolean isSuccess = false;
-		MembershipEntity membershipEntityForUpdate = entityManager.find(MembershipEntity.class, membershipDto.getId());
+	public void createMembership(MembershipDto membershipDto) throws PersistenceException{
+		
+		MembershipEntity newMembershipEntity = MembershipMapper.convertDtoToEntity(membershipDto);
+
+		this.membershipRepository.createMembership(newMembershipEntity);
+	
+	}
+	
+	@Override
+	public void updateMembership(MembershipDto membershipDto) throws PersistenceException{
+		MembershipEntity membershipEntityForUpdate = this.membershipRepository.getMembershipById(membershipDto.getId());
 		
 		if(membershipEntityForUpdate != null) {
 			membershipEntityForUpdate = updateMembershipEntity(membershipEntityForUpdate, membershipDto);
 			
-			try {
-				this.entityManager.merge(membershipEntityForUpdate);
-				isSuccess = true;
-			} catch (RuntimeException e) {
-			}
+			this.membershipRepository.updateMembership(membershipEntityForUpdate);
 		}
-		
-		return isSuccess;
 	}
 	
 	@Override
-	public boolean deleteMembership(long membershipId) {
-		boolean isSuccess = false;
-		MembershipEntity membershipEntityForDelete = entityManager.find(MembershipEntity.class, membershipId);
+	public void deleteMembership(long membershipId) throws PersistenceException{
+		MembershipEntity membershipEntityForDelete = this.membershipRepository.getMembershipById(membershipId);
 		
-		try {
-			this.entityManager.remove(membershipEntityForDelete);
-			isSuccess = true;
-		} catch(RuntimeException e) {
-		}
-		
-		return isSuccess;
+		this.membershipRepository.deleteMembership(membershipEntityForDelete);
 	}
 	
 	public MembershipEntity updateMembershipEntity(MembershipEntity originalMembershipEntity, MembershipDto newMembershipDto) {
