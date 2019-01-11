@@ -7,9 +7,11 @@ import org.springframework.stereotype.Component;
 import hu.simplesoft.springtutorial.Biblioteca.data.dao.AddressDao;
 import hu.simplesoft.springtutorial.Biblioteca.data.entity.AddressEntity;
 import hu.simplesoft.springtutorial.Biblioteca.data.exception.ElementNotFoundException;
+import hu.simplesoft.springtutorial.Biblioteca.data.exception.ObjectIsNullException;
 import hu.simplesoft.springtutorial.Biblioteca.data.exception.PersistenceException;
 import hu.simplesoft.springtutorial.Biblioteca.data.mapper.AddressMapper;
 import hu.simplesoft.springtutorial.Biblioteca.data.repository.AddressRepository;
+import hu.simplesoft.springtutorial.Biblioteca.data.util.Validator;
 import hu.simplesoft.sprintutorial.Biblioteca.service.dto.AddressDto;
 
 @Component
@@ -21,8 +23,10 @@ public class AddressDaoImpl implements AddressDao{
 	}
 	
 	@Override
-	public AddressDto getAddressById(long addressId) throws ElementNotFoundException{
+	public AddressDto getAddressById(long addressId) throws ElementNotFoundException, ObjectIsNullException{
 		AddressEntity foundEntity = this.addressRepository.getAddressById(addressId);
+		
+		Validator.validateObject(foundEntity, addressId);
 		
 		return AddressMapper.convertEntityToDto(foundEntity);
 	}
@@ -43,8 +47,10 @@ public class AddressDaoImpl implements AddressDao{
 	}
 	
 	@Override
-	public void updateAddress(AddressDto addressDto) throws PersistenceException {
+	public void updateAddress(AddressDto addressDto) throws PersistenceException, ObjectIsNullException{
 		AddressEntity addressEntityForUpdate = this.addressRepository.getAddressById(addressDto.getId());
+		
+		Validator.validateObject(addressEntityForUpdate, addressDto.getId());
 		
 		if(addressEntityForUpdate != null) {
 			addressEntityForUpdate = updateAddressEntity(addressEntityForUpdate, addressDto);
@@ -54,8 +60,10 @@ public class AddressDaoImpl implements AddressDao{
 	}
 	
 	@Override
-	public void deleteAddress(long addressId) throws PersistenceException{
+	public void deleteAddress(long addressId) throws PersistenceException, ObjectIsNullException{
 		AddressEntity addressEntityForDelete = this.addressRepository.getAddressById(addressId);
+		
+		Validator.validateObject(addressEntityForDelete, addressId);
 		
 		this.addressRepository.deleteAddress(addressEntityForDelete);
 		

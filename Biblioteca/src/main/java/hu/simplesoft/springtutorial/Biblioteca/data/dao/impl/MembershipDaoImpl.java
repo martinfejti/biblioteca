@@ -7,9 +7,11 @@ import org.springframework.stereotype.Component;
 import hu.simplesoft.springtutorial.Biblioteca.data.dao.MembershipDao;
 import hu.simplesoft.springtutorial.Biblioteca.data.entity.MembershipEntity;
 import hu.simplesoft.springtutorial.Biblioteca.data.exception.ElementNotFoundException;
+import hu.simplesoft.springtutorial.Biblioteca.data.exception.ObjectIsNullException;
 import hu.simplesoft.springtutorial.Biblioteca.data.exception.PersistenceException;
 import hu.simplesoft.springtutorial.Biblioteca.data.mapper.MembershipMapper;
 import hu.simplesoft.springtutorial.Biblioteca.data.repository.MembershipRepository;
+import hu.simplesoft.springtutorial.Biblioteca.data.util.Validator;
 import hu.simplesoft.sprintutorial.Biblioteca.service.dto.MembershipDto;
 
 @Component
@@ -21,8 +23,10 @@ public class MembershipDaoImpl implements MembershipDao{
 	}
 	
 	@Override
-	public MembershipDto getMembershipById(long membershipId) throws ElementNotFoundException{
+	public MembershipDto getMembershipById(long membershipId) throws ElementNotFoundException, ObjectIsNullException{
 		MembershipEntity membershipEntity = this.membershipRepository.getMembershipById(membershipId);
+		
+		Validator.validateObject(membershipEntity, membershipId);
 		
 		return MembershipMapper.convertEntityToDto(membershipEntity);
 	}
@@ -44,8 +48,10 @@ public class MembershipDaoImpl implements MembershipDao{
 	}
 	
 	@Override
-	public void updateMembership(MembershipDto membershipDto) throws PersistenceException{
+	public void updateMembership(MembershipDto membershipDto) throws PersistenceException, ObjectIsNullException{
 		MembershipEntity membershipEntityForUpdate = this.membershipRepository.getMembershipById(membershipDto.getId());
+		
+		Validator.validateObject(membershipEntityForUpdate, membershipDto.getId());
 		
 		if(membershipEntityForUpdate != null) {
 			membershipEntityForUpdate = updateMembershipEntity(membershipEntityForUpdate, membershipDto);
@@ -55,8 +61,10 @@ public class MembershipDaoImpl implements MembershipDao{
 	}
 	
 	@Override
-	public void deleteMembership(long membershipId) throws PersistenceException{
+	public void deleteMembership(long membershipId) throws PersistenceException, ObjectIsNullException{
 		MembershipEntity membershipEntityForDelete = this.membershipRepository.getMembershipById(membershipId);
+		
+		Validator.validateObject(membershipEntityForDelete, membershipId);
 		
 		this.membershipRepository.deleteMembership(membershipEntityForDelete);
 	}

@@ -8,9 +8,11 @@ import org.springframework.stereotype.Component;
 import hu.simplesoft.springtutorial.Biblioteca.data.dao.LibraryDao;
 import hu.simplesoft.springtutorial.Biblioteca.data.entity.LibraryEntity;
 import hu.simplesoft.springtutorial.Biblioteca.data.exception.ElementNotFoundException;
+import hu.simplesoft.springtutorial.Biblioteca.data.exception.ObjectIsNullException;
 import hu.simplesoft.springtutorial.Biblioteca.data.exception.PersistenceException;
 import hu.simplesoft.springtutorial.Biblioteca.data.mapper.LibraryMapper;
 import hu.simplesoft.springtutorial.Biblioteca.data.repository.LibraryRepository;
+import hu.simplesoft.springtutorial.Biblioteca.data.util.Validator;
 import hu.simplesoft.sprintutorial.Biblioteca.service.dto.LibraryDto;
 
 @Component
@@ -22,8 +24,10 @@ public class LibraryDaoImpl implements LibraryDao{
 	}
 	
 	@Override
-	public LibraryDto getLibraryById(long libraryId) throws ElementNotFoundException{
+	public LibraryDto getLibraryById(long libraryId) throws ElementNotFoundException, ObjectIsNullException{
 		LibraryEntity libraryEntity = this.libraryRepository.getLibraryById(libraryId);
+		
+		Validator.validateObject(libraryEntity, libraryId);
 		
 		return LibraryMapper.convertEntityToDto(libraryEntity);
 	}
@@ -43,8 +47,10 @@ public class LibraryDaoImpl implements LibraryDao{
 	}
 	
 	@Override
-	public void updateLibrary(LibraryDto libraryDto) throws PersistenceException{
+	public void updateLibrary(LibraryDto libraryDto) throws PersistenceException, ObjectIsNullException{
 		LibraryEntity libraryEntityForUpdate = this.libraryRepository.getLibraryById(libraryDto.getId());
+		
+		Validator.validateObject(libraryEntityForUpdate, libraryDto.getId());
 		
 		if(libraryEntityForUpdate != null) {
 			libraryEntityForUpdate = updateLibraryEntity(libraryEntityForUpdate, libraryDto);
@@ -54,8 +60,10 @@ public class LibraryDaoImpl implements LibraryDao{
 	}
 	
 	@Override
-	public void deleteLibrary(long libraryId) throws PersistenceException{
+	public void deleteLibrary(long libraryId) throws PersistenceException, ObjectIsNullException{
 		LibraryEntity libraryEntityForDelete = this.libraryRepository.getLibraryById(libraryId);
+		
+		Validator.validateObject(libraryEntityForDelete, libraryId);
 		
 		this.libraryRepository.deleteLibrary(libraryEntityForDelete);
 	}

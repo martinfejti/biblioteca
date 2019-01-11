@@ -7,9 +7,11 @@ import org.springframework.stereotype.Component;
 import hu.simplesoft.springtutorial.Biblioteca.data.dao.RoleDao;
 import hu.simplesoft.springtutorial.Biblioteca.data.entity.RoleEntity;
 import hu.simplesoft.springtutorial.Biblioteca.data.exception.ElementNotFoundException;
+import hu.simplesoft.springtutorial.Biblioteca.data.exception.ObjectIsNullException;
 import hu.simplesoft.springtutorial.Biblioteca.data.exception.PersistenceException;
 import hu.simplesoft.springtutorial.Biblioteca.data.mapper.RoleMapper;
 import hu.simplesoft.springtutorial.Biblioteca.data.repository.RoleRepository;
+import hu.simplesoft.springtutorial.Biblioteca.data.util.Validator;
 import hu.simplesoft.sprintutorial.Biblioteca.service.dto.RoleDto;
 
 @Component
@@ -21,8 +23,10 @@ public class RoleDaoImpl implements RoleDao{
 	}
 	
 	@Override
-	public RoleDto getRoleById(long roleId) throws ElementNotFoundException{
+	public RoleDto getRoleById(long roleId) throws ElementNotFoundException, ObjectIsNullException{
 		RoleEntity roleEntity = this.roleRepository.getRoleById(roleId);
+		
+		Validator.validateObject(roleEntity, roleId);
 		
 		return RoleMapper.convertEntityToDto(roleEntity);
 	}
@@ -42,8 +46,10 @@ public class RoleDaoImpl implements RoleDao{
 	}
 	
 	@Override
-	public void updateRole(RoleDto roleDto) throws PersistenceException{
+	public void updateRole(RoleDto roleDto) throws PersistenceException, ObjectIsNullException{
 		RoleEntity roleEntityForUpdate = this.roleRepository.getRoleById(roleDto.getId());
+		
+		Validator.validateObject(roleEntityForUpdate, roleDto.getId());
 		
 		if(roleEntityForUpdate != null) {
 			roleEntityForUpdate = updateRoleEntity(roleEntityForUpdate, roleDto);
@@ -53,8 +59,10 @@ public class RoleDaoImpl implements RoleDao{
 	}
 	
 	@Override
-	public void deleteRole(long roleId) throws PersistenceException{
+	public void deleteRole(long roleId) throws PersistenceException, ObjectIsNullException{
 		RoleEntity roleEntityForDelete = this.roleRepository.getRoleById(roleId);
+		
+		Validator.validateObject(roleEntityForDelete, roleId);
 
 		this.roleRepository.deleteRole(roleEntityForDelete);
 	}

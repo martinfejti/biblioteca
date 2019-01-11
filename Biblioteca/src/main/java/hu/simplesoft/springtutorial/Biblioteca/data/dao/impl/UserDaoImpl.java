@@ -7,9 +7,11 @@ import org.springframework.stereotype.Component;
 import hu.simplesoft.springtutorial.Biblioteca.data.dao.UserDao;
 import hu.simplesoft.springtutorial.Biblioteca.data.entity.UserEntity;
 import hu.simplesoft.springtutorial.Biblioteca.data.exception.ElementNotFoundException;
+import hu.simplesoft.springtutorial.Biblioteca.data.exception.ObjectIsNullException;
 import hu.simplesoft.springtutorial.Biblioteca.data.exception.PersistenceException;
 import hu.simplesoft.springtutorial.Biblioteca.data.mapper.UserMapper;
 import hu.simplesoft.springtutorial.Biblioteca.data.repository.UserRepository;
+import hu.simplesoft.springtutorial.Biblioteca.data.util.Validator;
 import hu.simplesoft.sprintutorial.Biblioteca.service.dto.UserDto;
 
 @Component
@@ -22,8 +24,10 @@ public class UserDaoImpl implements UserDao{
 	}
 	
 	@Override
-	public UserDto getUserById(long userId) throws ElementNotFoundException{
+	public UserDto getUserById(long userId) throws ElementNotFoundException, ObjectIsNullException{
 		UserEntity userEntity = this.userRepository.getUserById(userId);
+		
+		Validator.validateObject(userEntity, userId);
 		
 		return UserMapper.convertEntityToDto(userEntity);
 	}
@@ -43,8 +47,10 @@ public class UserDaoImpl implements UserDao{
 	}
 	
 	@Override
-	public void updateUser(UserDto userDto) throws PersistenceException{
+	public void updateUser(UserDto userDto) throws PersistenceException, ObjectIsNullException{
 		UserEntity userEntityForUpdate = this.userRepository.getUserById(userDto.getId());
+		
+		Validator.validateObject(userEntityForUpdate, userDto.getId());
 		
 		if(userEntityForUpdate != null) {
 			userEntityForUpdate = updateUserEntity(userEntityForUpdate, userDto);
@@ -54,8 +60,10 @@ public class UserDaoImpl implements UserDao{
 	}
 	
 	@Override
-	public void deleteUser(long userId) throws PersistenceException{
+	public void deleteUser(long userId) throws PersistenceException, ObjectIsNullException{
 		UserEntity userEntityForDelete = this.userRepository.getUserById(userId);
+		
+		Validator.validateObject(userEntityForDelete, userId);
 
 		this.userRepository.deleteUser(userEntityForDelete);
 	}

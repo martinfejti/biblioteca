@@ -7,9 +7,11 @@ import org.springframework.stereotype.Component;
 import hu.simplesoft.springtutorial.Biblioteca.data.dao.AuthorDao;
 import hu.simplesoft.springtutorial.Biblioteca.data.entity.AuthorEntity;
 import hu.simplesoft.springtutorial.Biblioteca.data.exception.ElementNotFoundException;
+import hu.simplesoft.springtutorial.Biblioteca.data.exception.ObjectIsNullException;
 import hu.simplesoft.springtutorial.Biblioteca.data.exception.PersistenceException;
 import hu.simplesoft.springtutorial.Biblioteca.data.mapper.AuthorMapper;
 import hu.simplesoft.springtutorial.Biblioteca.data.repository.AuthorRepository;
+import hu.simplesoft.springtutorial.Biblioteca.data.util.Validator;
 import hu.simplesoft.sprintutorial.Biblioteca.service.dto.AuthorDto;
 
 @Component
@@ -22,8 +24,10 @@ public class AuthorDaoImpl implements AuthorDao {
 	}
 	
 	@Override
-	public AuthorDto getAuthorById(long authorId) throws ElementNotFoundException{
+	public AuthorDto getAuthorById(long authorId) throws ElementNotFoundException, ObjectIsNullException{
 		AuthorEntity foundEntity = this.authorRepository.getAuthorById(authorId);
+		
+		Validator.validateObject(foundEntity, authorId);
 		
 		return AuthorMapper.convertEntityToDto(foundEntity);
 	}
@@ -43,8 +47,10 @@ public class AuthorDaoImpl implements AuthorDao {
 	}
 	
 	@Override
-	public void updateAuthor(AuthorDto authorDto) throws PersistenceException{
+	public void updateAuthor(AuthorDto authorDto) throws PersistenceException, ObjectIsNullException{
 		AuthorEntity newAuthorEntityForUpdate = this.authorRepository.getAuthorById(authorDto.getId());
+		
+		Validator.validateObject(newAuthorEntityForUpdate, authorDto.getId());
 		
 		if(newAuthorEntityForUpdate != null) {
 			newAuthorEntityForUpdate = updateAuthorEntity(newAuthorEntityForUpdate, authorDto);
@@ -54,8 +60,10 @@ public class AuthorDaoImpl implements AuthorDao {
 	}
 	
 	@Override
-	public void deleteAuthor(long authorId) throws PersistenceException{
+	public void deleteAuthor(long authorId) throws PersistenceException, ObjectIsNullException{
 		AuthorEntity authorEntityForDelete = this.authorRepository.getAuthorById(authorId);
+		
+		Validator.validateObject(authorEntityForDelete, authorId);
 		
 		this.authorRepository.deleteAuthor(authorEntityForDelete);
 	}

@@ -7,9 +7,11 @@ import org.springframework.stereotype.Component;
 import hu.simplesoft.springtutorial.Biblioteca.data.dao.BookDao;
 import hu.simplesoft.springtutorial.Biblioteca.data.entity.BookEntity;
 import hu.simplesoft.springtutorial.Biblioteca.data.exception.ElementNotFoundException;
+import hu.simplesoft.springtutorial.Biblioteca.data.exception.ObjectIsNullException;
 import hu.simplesoft.springtutorial.Biblioteca.data.exception.PersistenceException;
 import hu.simplesoft.springtutorial.Biblioteca.data.mapper.BookMapper;
 import hu.simplesoft.springtutorial.Biblioteca.data.repository.BookRepository;
+import hu.simplesoft.springtutorial.Biblioteca.data.util.Validator;
 import hu.simplesoft.sprintutorial.Biblioteca.service.dto.BookDto;
 
 @Component
@@ -21,8 +23,10 @@ public class BookDaoImpl implements BookDao{
 	}
 	
 	@Override
-	public BookDto getBookById(long bookId) throws ElementNotFoundException{
+	public BookDto getBookById(long bookId) throws ElementNotFoundException, ObjectIsNullException{
 		BookEntity bookEntity = this.bookRepository.getBookById(bookId);
+		
+		Validator.validateObject(bookEntity, bookId);
 		
 		return BookMapper.convertEntityToDto(bookEntity);
 	}
@@ -42,8 +46,10 @@ public class BookDaoImpl implements BookDao{
 	}
 	
 	@Override
-	public void updateBook(BookDto bookDto) throws PersistenceException{
+	public void updateBook(BookDto bookDto) throws PersistenceException, ObjectIsNullException{
 		BookEntity newBookEntityForUpdate = this.bookRepository.getBookById(bookDto.getId());
+		
+		Validator.validateObject(newBookEntityForUpdate, bookDto.getId());
 		
 		if(newBookEntityForUpdate != null) {
 			newBookEntityForUpdate = updateBookEntity(newBookEntityForUpdate, bookDto);
@@ -53,8 +59,10 @@ public class BookDaoImpl implements BookDao{
 	}
 	
 	@Override
-	public void deleteBook(long bookId) throws PersistenceException{
+	public void deleteBook(long bookId) throws PersistenceException, ObjectIsNullException{
 		BookEntity bookEntityForDelete = this.bookRepository.getBookById(bookId);
+		
+		Validator.validateObject(bookEntityForDelete, bookId);
 		
 		this.bookRepository.deleteBook(bookEntityForDelete);
 		
