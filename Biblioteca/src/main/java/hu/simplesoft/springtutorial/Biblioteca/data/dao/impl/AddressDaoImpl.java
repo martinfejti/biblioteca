@@ -2,6 +2,7 @@ package hu.simplesoft.springtutorial.Biblioteca.data.dao.impl;
 
 import java.util.List;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 import hu.simplesoft.springtutorial.Biblioteca.data.dao.AddressDao;
@@ -17,6 +18,7 @@ import hu.simplesoft.sprintutorial.Biblioteca.service.dto.AddressDto;
 @Component
 public class AddressDaoImpl implements AddressDao{
 
+	@Autowired
 	private AddressRepository addressRepository;
 	
 	public AddressDaoImpl() {
