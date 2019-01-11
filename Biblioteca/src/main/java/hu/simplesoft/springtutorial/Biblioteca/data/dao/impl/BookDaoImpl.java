@@ -2,6 +2,7 @@ package hu.simplesoft.springtutorial.Biblioteca.data.dao.impl;
 
 import java.util.List;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 import hu.simplesoft.springtutorial.Biblioteca.data.dao.BookDao;
@@ -17,6 +18,7 @@ import hu.simplesoft.sprintutorial.Biblioteca.service.dto.BookDto;
 @Component
 public class BookDaoImpl implements BookDao{
 
+	@Autowired
 	private BookRepository bookRepository;
 	
 	public BookDaoImpl() {
@@ -51,11 +53,9 @@ public class BookDaoImpl implements BookDao{
 		
 		Validator.validateObject(newBookEntityForUpdate, bookDto.getId());
 		
-		if(newBookEntityForUpdate != null) {
-			newBookEntityForUpdate = updateBookEntity(newBookEntityForUpdate, bookDto);
-			
-			this.bookRepository.updateBook(newBookEntityForUpdate);
-		}
+		newBookEntityForUpdate = updateBookEntity(newBookEntityForUpdate, bookDto);
+		
+		this.bookRepository.updateBook(newBookEntityForUpdate);
 	}
 	
 	@Override

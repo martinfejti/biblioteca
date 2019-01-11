@@ -52,11 +52,9 @@ public class AddressDaoImpl implements AddressDao{
 		
 		Validator.validateObject(addressEntityForUpdate, addressDto.getId());
 		
-		if(addressEntityForUpdate != null) {
-			addressEntityForUpdate = updateAddressEntity(addressEntityForUpdate, addressDto);
-			
-			this.addressRepository.updateAddress(addressEntityForUpdate);
-		}
+		addressEntityForUpdate = updateAddressEntity(addressEntityForUpdate, addressDto);
+		
+		this.addressRepository.updateAddress(addressEntityForUpdate);
 	}
 	
 	@Override

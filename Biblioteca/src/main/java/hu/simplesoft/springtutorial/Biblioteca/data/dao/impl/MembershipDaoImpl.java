@@ -2,6 +2,7 @@ package hu.simplesoft.springtutorial.Biblioteca.data.dao.impl;
 
 import java.util.List;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 import hu.simplesoft.springtutorial.Biblioteca.data.dao.MembershipDao;
@@ -17,6 +18,7 @@ import hu.simplesoft.sprintutorial.Biblioteca.service.dto.MembershipDto;
 @Component
 public class MembershipDaoImpl implements MembershipDao{
 
+	@Autowired
 	private MembershipRepository membershipRepository;
 	
 	public MembershipDaoImpl() {
@@ -53,11 +55,9 @@ public class MembershipDaoImpl implements MembershipDao{
 		
 		Validator.validateObject(membershipEntityForUpdate, membershipDto.getId());
 		
-		if(membershipEntityForUpdate != null) {
-			membershipEntityForUpdate = updateMembershipEntity(membershipEntityForUpdate, membershipDto);
-			
-			this.membershipRepository.updateMembership(membershipEntityForUpdate);
-		}
+		membershipEntityForUpdate = updateMembershipEntity(membershipEntityForUpdate, membershipDto);
+		
+		this.membershipRepository.updateMembership(membershipEntityForUpdate);
 	}
 	
 	@Override

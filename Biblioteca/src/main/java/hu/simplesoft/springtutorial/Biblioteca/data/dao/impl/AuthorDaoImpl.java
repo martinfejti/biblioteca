@@ -2,6 +2,7 @@ package hu.simplesoft.springtutorial.Biblioteca.data.dao.impl;
 
 import java.util.List;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 import hu.simplesoft.springtutorial.Biblioteca.data.dao.AuthorDao;
@@ -17,6 +18,7 @@ import hu.simplesoft.sprintutorial.Biblioteca.service.dto.AuthorDto;
 @Component
 public class AuthorDaoImpl implements AuthorDao {
 
+	@Autowired
 	private AuthorRepository authorRepository;
 	
 	public AuthorDaoImpl() {
@@ -52,11 +54,9 @@ public class AuthorDaoImpl implements AuthorDao {
 		
 		Validator.validateObject(newAuthorEntityForUpdate, authorDto.getId());
 		
-		if(newAuthorEntityForUpdate != null) {
-			newAuthorEntityForUpdate = updateAuthorEntity(newAuthorEntityForUpdate, authorDto);
-			
-			this.authorRepository.updateAuthor(newAuthorEntityForUpdate);
-		}
+		newAuthorEntityForUpdate = updateAuthorEntity(newAuthorEntityForUpdate, authorDto);
+		
+		this.authorRepository.updateAuthor(newAuthorEntityForUpdate);
 	}
 	
 	@Override

@@ -2,6 +2,7 @@ package hu.simplesoft.springtutorial.Biblioteca.data.dao.impl;
 
 import java.util.List;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 import hu.simplesoft.springtutorial.Biblioteca.data.dao.LoanDao;
@@ -17,7 +18,11 @@ import hu.simplesoft.sprintutorial.Biblioteca.service.dto.LoanDto;
 @Component
 public class LoanDaoImpl implements LoanDao{
 
+	@Autowired
 	private LoanRepository loanRepository;
+	
+	public LoanDaoImpl() {
+	}
 	
 	@Override
 	public LoanDto getLoanById(long loanId) throws ElementNotFoundException, ObjectIsNullException{
@@ -48,11 +53,9 @@ public class LoanDaoImpl implements LoanDao{
 		
 		Validator.validateObject(loanEntityForUpdate, loanDto.getId());
 		
-		if(loanEntityForUpdate != null) {
-			loanEntityForUpdate = updateLoanEntity(loanEntityForUpdate, loanDto);
-			
-			this.loanRepository.updateLoan(loanEntityForUpdate);
-		}
+		loanEntityForUpdate = updateLoanEntity(loanEntityForUpdate, loanDto);
+		
+		this.loanRepository.updateLoan(loanEntityForUpdate);
 	}
 	
 	@Override

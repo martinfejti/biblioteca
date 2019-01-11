@@ -3,6 +3,7 @@ package hu.simplesoft.springtutorial.Biblioteca.data.dao.impl;
 
 import java.util.List;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 import hu.simplesoft.springtutorial.Biblioteca.data.dao.LibraryDao;
@@ -18,6 +19,7 @@ import hu.simplesoft.sprintutorial.Biblioteca.service.dto.LibraryDto;
 @Component
 public class LibraryDaoImpl implements LibraryDao{
 
+	@Autowired
 	private LibraryRepository libraryRepository;
 	
 	public LibraryDaoImpl() {
@@ -52,11 +54,9 @@ public class LibraryDaoImpl implements LibraryDao{
 		
 		Validator.validateObject(libraryEntityForUpdate, libraryDto.getId());
 		
-		if(libraryEntityForUpdate != null) {
-			libraryEntityForUpdate = updateLibraryEntity(libraryEntityForUpdate, libraryDto);
-			
-			this.libraryRepository.updateLibrary(libraryEntityForUpdate);
-		}
+		libraryEntityForUpdate = updateLibraryEntity(libraryEntityForUpdate, libraryDto);
+		
+		this.libraryRepository.updateLibrary(libraryEntityForUpdate);
 	}
 	
 	@Override

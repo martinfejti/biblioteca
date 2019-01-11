@@ -2,6 +2,7 @@ package hu.simplesoft.springtutorial.Biblioteca.data.dao.impl;
 
 import java.util.List;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 import hu.simplesoft.springtutorial.Biblioteca.data.dao.RoleDao;
@@ -17,6 +18,7 @@ import hu.simplesoft.sprintutorial.Biblioteca.service.dto.RoleDto;
 @Component
 public class RoleDaoImpl implements RoleDao{
 
+	@Autowired
 	private RoleRepository roleRepository;
 	
 	public RoleDaoImpl() {
@@ -51,11 +53,9 @@ public class RoleDaoImpl implements RoleDao{
 		
 		Validator.validateObject(roleEntityForUpdate, roleDto.getId());
 		
-		if(roleEntityForUpdate != null) {
-			roleEntityForUpdate = updateRoleEntity(roleEntityForUpdate, roleDto);
+		roleEntityForUpdate = updateRoleEntity(roleEntityForUpdate, roleDto);
 
-			this.roleRepository.updateRole(roleEntityForUpdate);
-		}
+		this.roleRepository.updateRole(roleEntityForUpdate);
 	}
 	
 	@Override

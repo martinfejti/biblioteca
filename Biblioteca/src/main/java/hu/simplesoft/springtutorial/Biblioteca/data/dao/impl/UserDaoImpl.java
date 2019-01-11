@@ -2,6 +2,7 @@ package hu.simplesoft.springtutorial.Biblioteca.data.dao.impl;
 
 import java.util.List;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 import hu.simplesoft.springtutorial.Biblioteca.data.dao.UserDao;
@@ -17,6 +18,7 @@ import hu.simplesoft.sprintutorial.Biblioteca.service.dto.UserDto;
 @Component
 public class UserDaoImpl implements UserDao{
 
+	@Autowired
 	private UserRepository userRepository;
 	
 	public UserDaoImpl() {
@@ -52,11 +54,9 @@ public class UserDaoImpl implements UserDao{
 		
 		Validator.validateObject(userEntityForUpdate, userDto.getId());
 		
-		if(userEntityForUpdate != null) {
-			userEntityForUpdate = updateUserEntity(userEntityForUpdate, userDto);
+		userEntityForUpdate = updateUserEntity(userEntityForUpdate, userDto);
 
-			this.userRepository.updateUser(userEntityForUpdate);
-		}
+		this.userRepository.updateUser(userEntityForUpdate);
 	}
 	
 	@Override
