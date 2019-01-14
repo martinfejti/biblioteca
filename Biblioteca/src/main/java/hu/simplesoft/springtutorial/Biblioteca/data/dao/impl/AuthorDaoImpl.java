@@ -7,7 +7,6 @@ import org.springframework.stereotype.Component;
 
 import hu.simplesoft.springtutorial.Biblioteca.data.dao.AuthorDao;
 import hu.simplesoft.springtutorial.Biblioteca.data.entity.AuthorEntity;
-import hu.simplesoft.springtutorial.Biblioteca.data.exception.ElementNotFoundException;
 import hu.simplesoft.springtutorial.Biblioteca.data.exception.ObjectIsNullException;
 import hu.simplesoft.springtutorial.Biblioteca.data.exception.PersistenceException;
 import hu.simplesoft.springtutorial.Biblioteca.data.mapper.AuthorMapper;
@@ -26,7 +25,7 @@ public class AuthorDaoImpl implements AuthorDao {
 	}
 	
 	@Override
-	public AuthorDto getAuthorById(long authorId) throws ElementNotFoundException, ObjectIsNullException{
+	public AuthorDto getAuthorById(long authorId) throws PersistenceException, ObjectIsNullException{
 		AuthorEntity foundEntity = this.authorRepository.getAuthorById(authorId);
 		
 		Validator.validateObject(foundEntity, authorId);
@@ -35,7 +34,7 @@ public class AuthorDaoImpl implements AuthorDao {
 	}
 	
 	@Override
-	public List<AuthorDto> getAllAuthors() throws ElementNotFoundException{
+	public List<AuthorDto> getAllAuthors() throws PersistenceException{
 		List<AuthorEntity> authorEntityList = this.authorRepository.getAllAuthors();
 		
 		return AuthorMapper.convertListEntityToDto(authorEntityList);

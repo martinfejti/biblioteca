@@ -7,7 +7,6 @@ import org.springframework.stereotype.Component;
 
 import hu.simplesoft.springtutorial.Biblioteca.data.dao.RoleDao;
 import hu.simplesoft.springtutorial.Biblioteca.data.entity.RoleEntity;
-import hu.simplesoft.springtutorial.Biblioteca.data.exception.ElementNotFoundException;
 import hu.simplesoft.springtutorial.Biblioteca.data.exception.ObjectIsNullException;
 import hu.simplesoft.springtutorial.Biblioteca.data.exception.PersistenceException;
 import hu.simplesoft.springtutorial.Biblioteca.data.mapper.RoleMapper;
@@ -25,7 +24,7 @@ public class RoleDaoImpl implements RoleDao{
 	}
 	
 	@Override
-	public RoleDto getRoleById(long roleId) throws ElementNotFoundException, ObjectIsNullException{
+	public RoleDto getRoleById(long roleId) throws PersistenceException, ObjectIsNullException{
 		RoleEntity roleEntity = this.roleRepository.getRoleById(roleId);
 		
 		Validator.validateObject(roleEntity, roleId);
@@ -34,7 +33,7 @@ public class RoleDaoImpl implements RoleDao{
 	}
 	
 	@Override
-	public List<RoleDto> getAllRoles() throws ElementNotFoundException{
+	public List<RoleDto> getAllRoles() throws PersistenceException{
 		List<RoleEntity> roleEntityList = this.roleRepository.getAllRoles();
 		
 		return RoleMapper.convertListEntityToDto(roleEntityList);

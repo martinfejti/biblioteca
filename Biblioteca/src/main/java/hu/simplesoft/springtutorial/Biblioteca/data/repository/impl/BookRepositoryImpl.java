@@ -25,7 +25,7 @@ public class BookRepositoryImpl implements BookRepository{
 	}
 	
 	@Override
-	public BookEntity getBookById(long bookId) throws ElementNotFoundException{
+	public BookEntity getBookById(long bookId) throws PersistenceException{
 		BookEntity bookEntity;
 		
 		try {
@@ -38,7 +38,7 @@ public class BookRepositoryImpl implements BookRepository{
 	}
 	
 	@Override
-	public List<BookEntity> getAllBooks() throws ElementNotFoundException{
+	public List<BookEntity> getAllBooks() throws PersistenceException{
 		List<BookEntity> bookEntityList;
 		
 		try {

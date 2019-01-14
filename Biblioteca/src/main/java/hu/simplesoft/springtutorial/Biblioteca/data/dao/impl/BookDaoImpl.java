@@ -7,7 +7,6 @@ import org.springframework.stereotype.Component;
 
 import hu.simplesoft.springtutorial.Biblioteca.data.dao.BookDao;
 import hu.simplesoft.springtutorial.Biblioteca.data.entity.BookEntity;
-import hu.simplesoft.springtutorial.Biblioteca.data.exception.ElementNotFoundException;
 import hu.simplesoft.springtutorial.Biblioteca.data.exception.ObjectIsNullException;
 import hu.simplesoft.springtutorial.Biblioteca.data.exception.PersistenceException;
 import hu.simplesoft.springtutorial.Biblioteca.data.mapper.BookMapper;
@@ -25,7 +24,7 @@ public class BookDaoImpl implements BookDao{
 	}
 	
 	@Override
-	public BookDto getBookById(long bookId) throws ElementNotFoundException, ObjectIsNullException{
+	public BookDto getBookById(long bookId) throws PersistenceException, ObjectIsNullException{
 		BookEntity bookEntity = this.bookRepository.getBookById(bookId);
 		
 		Validator.validateObject(bookEntity, bookId);
@@ -34,7 +33,7 @@ public class BookDaoImpl implements BookDao{
 	}
 	
 	@Override
-	public List<BookDto> getAllBooks() throws ElementNotFoundException{
+	public List<BookDto> getAllBooks() throws PersistenceException{
 		List<BookEntity> bookEntityList = this.bookRepository.getAllBooks();
 		
 		return BookMapper.convertListEntityToDto(bookEntityList);

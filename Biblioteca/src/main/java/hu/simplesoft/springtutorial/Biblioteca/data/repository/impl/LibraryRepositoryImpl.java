@@ -25,7 +25,7 @@ public class LibraryRepositoryImpl implements LibraryRepository{
 	}
 	
 	@Override
-	public LibraryEntity getLibraryById(long libraryId) throws ElementNotFoundException{
+	public LibraryEntity getLibraryById(long libraryId) throws PersistenceException{
 		LibraryEntity libraryEntity;
 		
 		try {
@@ -38,7 +38,7 @@ public class LibraryRepositoryImpl implements LibraryRepository{
 	}
 	
 	@Override
-	public List<LibraryEntity> getAllLibraries() throws ElementNotFoundException{
+	public List<LibraryEntity> getAllLibraries() throws PersistenceException{
 		List<LibraryEntity> libraryEntityList;
 		
 		try {

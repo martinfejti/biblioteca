@@ -7,7 +7,6 @@ import org.springframework.stereotype.Component;
 
 import hu.simplesoft.springtutorial.Biblioteca.data.dao.MembershipDao;
 import hu.simplesoft.springtutorial.Biblioteca.data.entity.MembershipEntity;
-import hu.simplesoft.springtutorial.Biblioteca.data.exception.ElementNotFoundException;
 import hu.simplesoft.springtutorial.Biblioteca.data.exception.ObjectIsNullException;
 import hu.simplesoft.springtutorial.Biblioteca.data.exception.PersistenceException;
 import hu.simplesoft.springtutorial.Biblioteca.data.mapper.MembershipMapper;
@@ -25,7 +24,7 @@ public class MembershipDaoImpl implements MembershipDao{
 	}
 	
 	@Override
-	public MembershipDto getMembershipById(long membershipId) throws ElementNotFoundException, ObjectIsNullException{
+	public MembershipDto getMembershipById(long membershipId) throws PersistenceException, ObjectIsNullException{
 		MembershipEntity membershipEntity = this.membershipRepository.getMembershipById(membershipId);
 		
 		Validator.validateObject(membershipEntity, membershipId);
@@ -34,7 +33,7 @@ public class MembershipDaoImpl implements MembershipDao{
 	}
 	
 	@Override
-	public List<MembershipDto> getAllMemberships() throws ElementNotFoundException{
+	public List<MembershipDto> getAllMemberships() throws PersistenceException{
 		List<MembershipEntity> membershipEntityList = this.membershipRepository.getAllMemberships();
 		
 		return MembershipMapper.convertListEntityToDto(membershipEntityList);

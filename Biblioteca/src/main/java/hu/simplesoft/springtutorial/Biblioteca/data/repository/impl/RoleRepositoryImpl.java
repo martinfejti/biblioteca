@@ -25,7 +25,7 @@ public class RoleRepositoryImpl implements RoleRepository{
 	}
 	
 	@Override
-	public RoleEntity getRoleById(long roleId) throws ElementNotFoundException{
+	public RoleEntity getRoleById(long roleId) throws PersistenceException{
 		RoleEntity roleEntity;
 		
 		try {
@@ -37,7 +37,7 @@ public class RoleRepositoryImpl implements RoleRepository{
 	}
 	
 	@Override
-	public List<RoleEntity> getAllRoles() throws ElementNotFoundException{
+	public List<RoleEntity> getAllRoles() throws PersistenceException{
 		List<RoleEntity> roleEntityList;
 		
 		try {

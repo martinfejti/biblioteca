@@ -25,7 +25,7 @@ public class LoanRepositoryImpl implements LoanRepository{
 	}
 	
 	@Override
-	public LoanEntity getLoanById(long loanId) throws ElementNotFoundException{
+	public LoanEntity getLoanById(long loanId) throws PersistenceException{
 		LoanEntity loanEntity;
 		
 		try {
@@ -37,7 +37,7 @@ public class LoanRepositoryImpl implements LoanRepository{
 	}
 	
 	@Override
-	public List<LoanEntity> getAllLoans() throws ElementNotFoundException{
+	public List<LoanEntity> getAllLoans() throws PersistenceException{
 		List<LoanEntity> loanEntityList;
 		
 		try {

@@ -7,7 +7,6 @@ import org.springframework.stereotype.Component;
 
 import hu.simplesoft.springtutorial.Biblioteca.data.dao.LoanDao;
 import hu.simplesoft.springtutorial.Biblioteca.data.entity.LoanEntity;
-import hu.simplesoft.springtutorial.Biblioteca.data.exception.ElementNotFoundException;
 import hu.simplesoft.springtutorial.Biblioteca.data.exception.ObjectIsNullException;
 import hu.simplesoft.springtutorial.Biblioteca.data.exception.PersistenceException;
 import hu.simplesoft.springtutorial.Biblioteca.data.mapper.LoanMapper;
@@ -25,7 +24,7 @@ public class LoanDaoImpl implements LoanDao{
 	}
 	
 	@Override
-	public LoanDto getLoanById(long loanId) throws ElementNotFoundException, ObjectIsNullException{
+	public LoanDto getLoanById(long loanId) throws PersistenceException, ObjectIsNullException{
 		LoanEntity loanEntity = this.loanRepository.getLoanById(loanId);
 		
 		Validator.validateObject(loanEntity, loanId);
@@ -34,7 +33,7 @@ public class LoanDaoImpl implements LoanDao{
 	}
 	
 	@Override
-	public List<LoanDto> getAllLoans() throws ElementNotFoundException{
+	public List<LoanDto> getAllLoans() throws PersistenceException{
 		List<LoanEntity> loanEntityList = this.loanRepository.getAllLoans();
 		
 		return LoanMapper.convertListEntityToDto(loanEntityList);

@@ -8,7 +8,6 @@ import org.springframework.stereotype.Component;
 
 import hu.simplesoft.springtutorial.Biblioteca.data.dao.LibraryDao;
 import hu.simplesoft.springtutorial.Biblioteca.data.entity.LibraryEntity;
-import hu.simplesoft.springtutorial.Biblioteca.data.exception.ElementNotFoundException;
 import hu.simplesoft.springtutorial.Biblioteca.data.exception.ObjectIsNullException;
 import hu.simplesoft.springtutorial.Biblioteca.data.exception.PersistenceException;
 import hu.simplesoft.springtutorial.Biblioteca.data.mapper.LibraryMapper;
@@ -26,7 +25,7 @@ public class LibraryDaoImpl implements LibraryDao{
 	}
 	
 	@Override
-	public LibraryDto getLibraryById(long libraryId) throws ElementNotFoundException, ObjectIsNullException{
+	public LibraryDto getLibraryById(long libraryId) throws PersistenceException, ObjectIsNullException{
 		LibraryEntity libraryEntity = this.libraryRepository.getLibraryById(libraryId);
 		
 		Validator.validateObject(libraryEntity, libraryId);
@@ -35,7 +34,7 @@ public class LibraryDaoImpl implements LibraryDao{
 	}
 	
 	@Override
-	public List<LibraryDto> getAllLibraries() throws ElementNotFoundException{
+	public List<LibraryDto> getAllLibraries() throws PersistenceException{
 		List<LibraryEntity> libraryEntityList = this.libraryRepository.getAllLibraries();
 		
 		return LibraryMapper.convertListEntityToDto(libraryEntityList);

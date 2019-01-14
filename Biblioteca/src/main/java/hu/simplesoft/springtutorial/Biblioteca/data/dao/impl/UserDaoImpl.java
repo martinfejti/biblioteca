@@ -7,7 +7,6 @@ import org.springframework.stereotype.Component;
 
 import hu.simplesoft.springtutorial.Biblioteca.data.dao.UserDao;
 import hu.simplesoft.springtutorial.Biblioteca.data.entity.UserEntity;
-import hu.simplesoft.springtutorial.Biblioteca.data.exception.ElementNotFoundException;
 import hu.simplesoft.springtutorial.Biblioteca.data.exception.ObjectIsNullException;
 import hu.simplesoft.springtutorial.Biblioteca.data.exception.PersistenceException;
 import hu.simplesoft.springtutorial.Biblioteca.data.mapper.UserMapper;
@@ -26,7 +25,7 @@ public class UserDaoImpl implements UserDao{
 	}
 	
 	@Override
-	public UserDto getUserById(long userId) throws ElementNotFoundException, ObjectIsNullException{
+	public UserDto getUserById(long userId) throws PersistenceException, ObjectIsNullException{
 		UserEntity userEntity = this.userRepository.getUserById(userId);
 		
 		Validator.validateObject(userEntity, userId);
@@ -35,7 +34,7 @@ public class UserDaoImpl implements UserDao{
 	}
 	
 	@Override
-	public List<UserDto> getAllUsers() throws ElementNotFoundException{
+	public List<UserDto> getAllUsers() throws PersistenceException{
 		List<UserEntity> userEntityList = this.userRepository.getAllUsers();
 		
 		return UserMapper.convertListEntityToDto(userEntityList);

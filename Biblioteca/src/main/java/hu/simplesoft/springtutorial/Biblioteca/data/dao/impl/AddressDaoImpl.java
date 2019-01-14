@@ -7,7 +7,6 @@ import org.springframework.stereotype.Component;
 
 import hu.simplesoft.springtutorial.Biblioteca.data.dao.AddressDao;
 import hu.simplesoft.springtutorial.Biblioteca.data.entity.AddressEntity;
-import hu.simplesoft.springtutorial.Biblioteca.data.exception.ElementNotFoundException;
 import hu.simplesoft.springtutorial.Biblioteca.data.exception.ObjectIsNullException;
 import hu.simplesoft.springtutorial.Biblioteca.data.exception.PersistenceException;
 import hu.simplesoft.springtutorial.Biblioteca.data.mapper.AddressMapper;
@@ -25,7 +24,7 @@ public class AddressDaoImpl implements AddressDao{
 	}
 	
 	@Override
-	public AddressDto getAddressById(long addressId) throws ElementNotFoundException, ObjectIsNullException{
+	public AddressDto getAddressById(long addressId) throws PersistenceException, ObjectIsNullException{
 		AddressEntity foundEntity = this.addressRepository.getAddressById(addressId);
 		
 		Validator.validateObject(foundEntity, addressId);
@@ -34,7 +33,7 @@ public class AddressDaoImpl implements AddressDao{
 	}
 	
 	@Override
-	public List<AddressDto> getAllAddresses() throws ElementNotFoundException{
+	public List<AddressDto> getAllAddresses() throws PersistenceException{
 		List<AddressEntity> addressEntityList = this.addressRepository.getAllAddresses();
 		
 		return AddressMapper.convertListEntityToDto(addressEntityList);

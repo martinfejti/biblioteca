@@ -25,7 +25,7 @@ public class UserRepositoryImpl implements UserRepository{
 	}
 	
 	@Override
-	public UserEntity getUserById(long userId) throws ElementNotFoundException{
+	public UserEntity getUserById(long userId) throws PersistenceException{
 		UserEntity userEntity;
 		
 		try {
@@ -38,7 +38,7 @@ public class UserRepositoryImpl implements UserRepository{
 	}
 	
 	@Override
-	public List<UserEntity> getAllUsers() throws ElementNotFoundException{
+	public List<UserEntity> getAllUsers() throws PersistenceException{
 		List<UserEntity> userEntityList;
 		
 		try {

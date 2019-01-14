@@ -25,7 +25,7 @@ public class AuthorRepositoryImpl implements AuthorRepository{
 	}
 	
 	@Override
-	public AuthorEntity getAuthorById(long authorId) throws ElementNotFoundException{
+	public AuthorEntity getAuthorById(long authorId) throws PersistenceException{
 		AuthorEntity foundEntity;
 		
 		try {
@@ -38,7 +38,7 @@ public class AuthorRepositoryImpl implements AuthorRepository{
 	}
 	
 	@Override
-	public List<AuthorEntity> getAllAuthors() throws ElementNotFoundException{
+	public List<AuthorEntity> getAllAuthors() throws PersistenceException{
 		List<AuthorEntity> authorEntityList;
 		
 		try {

@@ -25,7 +25,7 @@ public class AddressRepositoryImpl implements AddressRepository{
 	}
 	
 	@Override
-	public AddressEntity getAddressById(long addressId) throws ElementNotFoundException{
+	public AddressEntity getAddressById(long addressId) throws PersistenceException{
 		AddressEntity foundEntity;
 		
 		try {
@@ -38,7 +38,7 @@ public class AddressRepositoryImpl implements AddressRepository{
 	}
 	
 	@Override
-	public List<AddressEntity> getAllAddresses() throws ElementNotFoundException{
+	public List<AddressEntity> getAllAddresses() throws PersistenceException{
 		List<AddressEntity> addressEntityList;
 		
 		try {

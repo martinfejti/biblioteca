@@ -25,7 +25,7 @@ public class MembershipRepositoryImpl implements MembershipRepository{
 	}
 	
 	@Override
-	public MembershipEntity getMembershipById(long membershipId) throws ElementNotFoundException{
+	public MembershipEntity getMembershipById(long membershipId) throws PersistenceException{
 		MembershipEntity membershipEntity;
 		
 		try {
@@ -38,7 +38,7 @@ public class MembershipRepositoryImpl implements MembershipRepository{
 	}
 	
 	@Override
-	public List<MembershipEntity> getAllMemberships() throws ElementNotFoundException{
+	public List<MembershipEntity> getAllMemberships() throws PersistenceException{
 		List<MembershipEntity> membershipEntityList;
 		
 		try {
