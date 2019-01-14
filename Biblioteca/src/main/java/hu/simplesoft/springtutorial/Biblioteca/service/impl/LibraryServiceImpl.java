@@ -5,58 +5,58 @@ import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import hu.simplesoft.springtutorial.Biblioteca.data.dao.AddressDao;
+import hu.simplesoft.springtutorial.Biblioteca.data.dao.LibraryDao;
 import hu.simplesoft.springtutorial.Biblioteca.data.exception.PersistenceException;
-import hu.simplesoft.springtutorial.Biblioteca.service.AddressService;
+import hu.simplesoft.springtutorial.Biblioteca.service.LibraryService;
 import hu.simplesoft.springtutorial.Biblioteca.service.exception.ServiceException;
-import hu.simplesoft.sprintutorial.Biblioteca.service.dto.AddressDto;
+import hu.simplesoft.sprintutorial.Biblioteca.service.dto.LibraryDto;
 
 @Service
-public class AddressServiceImpl implements AddressService{
+public class LibraryServiceImpl implements LibraryService{
 
 	@Autowired
-	private AddressDao addressDao;
+	private LibraryDao libraryDao;
 	
 	@Override
-	public void createAddress(AddressDto addressDto) throws ServiceException{
+	public void createLibrary(LibraryDto libraryDto) throws ServiceException{
 		try {
-			this.addressDao.createAddress(addressDto);
+			this.libraryDao.createLibrary(libraryDto);
 		} catch (PersistenceException e) {
 			throw new ServiceException("Create has failed!", e);
 		}
 	}
 	
 	@Override
-	public void updateAddress(AddressDto addressDto) throws ServiceException{
+	public void updateLibrary(LibraryDto libraryDto) throws ServiceException{
 		try {
-			this.addressDao.updateAddress(addressDto);
+			this.libraryDao.updateLibrary(libraryDto);
 		} catch (PersistenceException e) {
 			throw new ServiceException("Update has failed!", e);
 		}
 	}
 	
 	@Override
-	public void deleteAddress(long addressId) throws ServiceException{
+	public void deleteLibrary(long libraryId) throws ServiceException{
 		try {
-			this.addressDao.deleteAddress(addressId);
+			this.libraryDao.deleteLibrary(libraryId);
 		} catch (PersistenceException e) {
 			throw new ServiceException("Delete has failed!", e);
 		}
 	}
 	
 	@Override
-	public AddressDto getAddressById(long addressId) throws ServiceException{
+	public LibraryDto getLibraryById(long libraryId) throws ServiceException{
 		try {
-			return this.addressDao.getAddressById(addressId);
+			return this.libraryDao.getLibraryById(libraryId);
 		} catch (PersistenceException e) {
 			throw new ServiceException("Element not found!", e);
 		}
 	}
 	
 	@Override
-	public List<AddressDto> getAllAddresses() throws ServiceException{
-		try { 
-			return this.addressDao.getAllAddresses();
+	public List<LibraryDto> getAllLibraries() throws ServiceException{
+		try {
+			return this.libraryDao.getAllLibraries();
 		} catch (PersistenceException e) {
 			throw new ServiceException("Element not found!", e);
 		}

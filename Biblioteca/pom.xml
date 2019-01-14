@@ -194,6 +194,6 @@
                 </plugin>
             </plugins>
         </pluginManagement>
-        <finalName>HouseMarket</finalName>
+        <finalName>Biblioteca</finalName>
     </build>
 </project>
