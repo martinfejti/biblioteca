@@ -1,6 +1,6 @@
 package hu.simplesoft.springtutorial.Biblioteca.data.exception;
 
-public class ObjectIsNullException extends Exception{
+public class ObjectIsNullException extends PersistenceException{
 
 	public ObjectIsNullException() {
 	}

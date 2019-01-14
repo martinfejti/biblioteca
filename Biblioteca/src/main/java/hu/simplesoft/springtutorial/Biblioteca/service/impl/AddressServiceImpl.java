@@ -28,7 +28,7 @@ public class AddressServiceImpl implements AddressService{
 	}
 	
 	@Override
-	public void updateAddress(AddressDto addressDto) throws ServiceException, ObjectIsNullException{
+	public void updateAddress(AddressDto addressDto) throws ServiceException{
 		try {
 			this.addressDao.updateAddress(addressDto);
 		} catch (PersistenceException e) {
@@ -37,7 +37,7 @@ public class AddressServiceImpl implements AddressService{
 	}
 	
 	@Override
-	public void deleteAddress(long addressId) throws ServiceException, ObjectIsNullException{
+	public void deleteAddress(long addressId) throws ServiceException{
 		try {
 			this.addressDao.deleteAddress(addressId);
 		} catch (PersistenceException e) {
@@ -46,7 +46,7 @@ public class AddressServiceImpl implements AddressService{
 	}
 	
 	@Override
-	public AddressDto getAddressById(long addressId) throws ServiceException, ObjectIsNullException{
+	public AddressDto getAddressById(long addressId) throws ServiceException{
 		try {
 			return this.addressDao.getAddressById(addressId);
 		} catch (PersistenceException e) {
