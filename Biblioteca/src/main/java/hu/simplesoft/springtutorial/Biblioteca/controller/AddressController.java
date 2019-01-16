@@ -2,6 +2,8 @@ package hu.simplesoft.springtutorial.Biblioteca.controller;
 
 import java.util.List;
 
+import javax.validation.Valid;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -12,6 +14,9 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import hu.simplesoft.springtutorial.Biblioteca.controller.request.AddressCreateRequest;
+import hu.simplesoft.springtutorial.Biblioteca.controller.request.AddressUpdateRequest;
+import hu.simplesoft.springtutorial.Biblioteca.controller.request.mapper.AddressRequestMapper;
 import hu.simplesoft.springtutorial.Biblioteca.service.AddressService;
 import hu.simplesoft.springtutorial.Biblioteca.service.exception.ServiceException;
 import hu.simplesoft.sprintutorial.Biblioteca.service.dto.AddressDto;
@@ -24,13 +29,15 @@ public class AddressController {
 	private AddressService addressService;
 	
 	@PostMapping("/createAddress")
-	public void createAddress(@RequestBody AddressDto addressDto) throws ServiceException{
-		this.addressService.createAddress(addressDto);
+	public void createAddress(@Valid @RequestBody AddressCreateRequest addressCreateRequest) throws ServiceException{
+		AddressDto addressDtoToConvert = AddressRequestMapper.convertCreateRequestToDto(addressCreateRequest);
+		this.addressService.createAddress(addressDtoToConvert);
 	}
 	
 	@PutMapping("/updateAddress")
-	public void updateAddress(@RequestBody AddressDto addressDto) throws ServiceException{
-		this.addressService.updateAddress(addressDto);
+	public void updateAddress(@Valid @RequestBody AddressUpdateRequest addressUpdateRequest) throws ServiceException{
+		AddressDto addressDtoToConvert = AddressRequestMapper.convertUpdateRequestToDto(addressUpdateRequest);
+		this.addressService.updateAddress(addressDtoToConvert);
 	}
 	
 	@DeleteMapping("/deleteAddress/{id}")
