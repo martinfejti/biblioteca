@@ -1,4 +1,4 @@
-package hu.simplesoft.springtutorial.Biblioteca.controller.request.mapper;
+package hu.simplesoft.springtutorial.Biblioteca.controller.mapper;
 
 import hu.simplesoft.springtutorial.Biblioteca.controller.request.AddressCreateRequest;
 import hu.simplesoft.springtutorial.Biblioteca.controller.request.AddressUpdateRequest;

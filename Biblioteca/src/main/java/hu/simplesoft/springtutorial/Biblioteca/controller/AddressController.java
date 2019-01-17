@@ -3,6 +3,9 @@ package hu.simplesoft.springtutorial.Biblioteca.controller;
 import java.util.List;
 
 import javax.validation.Valid;
+import javax.validation.constraints.Min;
+import javax.validation.constraints.NotNull;
+import javax.validation.constraints.Positive;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.DeleteMapping;
@@ -14,9 +17,9 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import hu.simplesoft.springtutorial.Biblioteca.controller.mapper.AddressRequestMapper;
 import hu.simplesoft.springtutorial.Biblioteca.controller.request.AddressCreateRequest;
 import hu.simplesoft.springtutorial.Biblioteca.controller.request.AddressUpdateRequest;
-import hu.simplesoft.springtutorial.Biblioteca.controller.request.mapper.AddressRequestMapper;
 import hu.simplesoft.springtutorial.Biblioteca.service.AddressService;
 import hu.simplesoft.springtutorial.Biblioteca.service.exception.ServiceException;
 import hu.simplesoft.sprintutorial.Biblioteca.service.dto.AddressDto;
@@ -27,6 +30,9 @@ public class AddressController {
 
 	@Autowired
 	private AddressService addressService;
+	
+	public AddressController() {
+	}
 	
 	@PostMapping("/createAddress")
 	public void createAddress(@Valid @RequestBody AddressCreateRequest addressCreateRequest) throws ServiceException{
@@ -41,12 +47,12 @@ public class AddressController {
 	}
 	
 	@DeleteMapping("/deleteAddress/{id}")
-	public void deleteAddress(@PathVariable long id) throws ServiceException{
+	public void deleteAddress(@PathVariable @Min(1) @Positive long id) throws ServiceException{
 		this.addressService.deleteAddress(id);
 	}
 	
 	@GetMapping("/getAddress/{id}")
-	public AddressDto getAddressById(@PathVariable long id) throws ServiceException{
+	public AddressDto getAddressById(@PathVariable @Min(1) @Positive long id) throws ServiceException{
 		AddressDto addressDto = this.addressService.getAddressById(id);
 		return addressDto;
 	}

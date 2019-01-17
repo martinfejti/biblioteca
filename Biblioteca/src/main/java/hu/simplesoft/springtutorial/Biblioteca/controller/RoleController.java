@@ -2,6 +2,8 @@ package hu.simplesoft.springtutorial.Biblioteca.controller;
 
 import java.util.List;
 
+import javax.validation.Valid;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -12,6 +14,9 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import hu.simplesoft.springtutorial.Biblioteca.controller.mapper.RoleRequestMapper;
+import hu.simplesoft.springtutorial.Biblioteca.controller.request.RoleCreateRequest;
+import hu.simplesoft.springtutorial.Biblioteca.controller.request.RoleUpdateRequest;
 import hu.simplesoft.springtutorial.Biblioteca.service.RoleService;
 import hu.simplesoft.springtutorial.Biblioteca.service.exception.ServiceException;
 import hu.simplesoft.sprintutorial.Biblioteca.service.dto.RoleDto;
@@ -24,12 +29,14 @@ public class RoleController {
 	private RoleService roleService;
 	
 	@PostMapping("/createRole")
-	public void createRole(@RequestBody RoleDto roleDto) throws ServiceException{
+	public void createRole(@Valid @RequestBody RoleCreateRequest roleCreateRequest) throws ServiceException{
+		RoleDto roleDto = RoleRequestMapper.convertCreateRequestToDto(roleCreateRequest);
 		this.roleService.createRole(roleDto);
 	}
 	
 	@PutMapping("/updateRole")
-	public void updateRole(@RequestBody RoleDto roleDto) throws ServiceException{
+	public void updateRole(@Valid @RequestBody RoleUpdateRequest roleUpdateRequest) throws ServiceException{
+		RoleDto roleDto = RoleRequestMapper.convertUpdateRequestToDto(roleUpdateRequest);
 		this.roleService.updateRole(roleDto);
 	}
 	
