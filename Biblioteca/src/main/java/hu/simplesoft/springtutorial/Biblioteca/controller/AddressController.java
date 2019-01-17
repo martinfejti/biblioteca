@@ -47,12 +47,12 @@ public class AddressController {
 	}
 	
 	@DeleteMapping("/deleteAddress/{id}")
-	public void deleteAddress(@PathVariable @Min(1) @Positive long id) throws ServiceException{
+	public void deleteAddress(@PathVariable @Positive long id) throws ServiceException{
 		this.addressService.deleteAddress(id);
 	}
 	
 	@GetMapping("/getAddress/{id}")
-	public AddressDto getAddressById(@PathVariable @Min(1) @Positive long id) throws ServiceException{
+	public AddressDto getAddressById(@PathVariable @Positive long id) throws ServiceException{
 		AddressDto addressDto = this.addressService.getAddressById(id);
 		return addressDto;
 	}

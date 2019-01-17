@@ -2,6 +2,9 @@ package hu.simplesoft.springtutorial.Biblioteca.controller;
 
 import java.util.List;
 
+import javax.validation.Valid;
+import javax.validation.constraints.Positive;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -12,6 +15,9 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import hu.simplesoft.springtutorial.Biblioteca.controller.mapper.UserRequestMapper;
+import hu.simplesoft.springtutorial.Biblioteca.controller.request.UserCreateRequest;
+import hu.simplesoft.springtutorial.Biblioteca.controller.request.UserUpdateRequest;
 import hu.simplesoft.springtutorial.Biblioteca.service.UserService;
 import hu.simplesoft.springtutorial.Biblioteca.service.exception.ServiceException;
 import hu.simplesoft.sprintutorial.Biblioteca.service.dto.UserDto;
@@ -23,23 +29,28 @@ public class UserController {
 	@Autowired
 	private UserService userService;
 	
+	public UserController() {
+	}
+	
 	@PostMapping("/createUser")
-	public void createUser(@RequestBody UserDto userDto) throws ServiceException{
+	public void createUser(@Valid @RequestBody UserCreateRequest userCreateRequest) throws ServiceException{
+		UserDto userDto = UserRequestMapper.convertCreateRequestToDto(userCreateRequest);
 		this.userService.createUser(userDto);
 	}
 	
 	@PutMapping("/updateUser")
-	public void updateUser(@RequestBody UserDto userDto) throws ServiceException{
+	public void updateUser(@Valid @RequestBody UserUpdateRequest userUpdateRequest) throws ServiceException{
+		UserDto userDto = UserRequestMapper.convertUpdateRequestToDto(userUpdateRequest);
 		this.userService.updateUser(userDto);
 	}
 	
 	@DeleteMapping("/deleteUser/{id}")
-	public void deleteUser(@PathVariable long id) throws ServiceException{
+	public void deleteUser(@PathVariable @Positive long id) throws ServiceException{
 		this.userService.deleteUser(id);
 	}
 	
 	@GetMapping("getUser/{id}")
-	public UserDto getUserById(@PathVariable long id) throws ServiceException{
+	public UserDto getUserById(@PathVariable @Positive long id) throws ServiceException{
 		UserDto userDto = this.userService.getUserById(id);
 		return userDto;
 	}

@@ -3,6 +3,7 @@ package hu.simplesoft.springtutorial.Biblioteca.controller;
 import java.util.List;
 
 import javax.validation.Valid;
+import javax.validation.constraints.Positive;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.DeleteMapping;
@@ -28,6 +29,9 @@ public class AuthorController {
 	@Autowired
 	private AuthorService authorService;
 	
+	public AuthorController() {
+	}
+	
 	@PostMapping("/createAuthor")
 	public void createAuthor(@Valid @RequestBody AuthorCreateRequest authorCreateRequest) throws ServiceException{
 		AuthorDto authorDto = AuthorRequestMapper.convertCreateRequestToDto(authorCreateRequest);
@@ -41,12 +45,12 @@ public class AuthorController {
 	}
 	
 	@DeleteMapping("/deleteAuthor/{id}")
-	public void deleteAuthor(@PathVariable long id) throws ServiceException{
+	public void deleteAuthor(@PathVariable @Positive long id) throws ServiceException{
 		this.authorService.deleteAuthor(id);
 	}
 	
 	@GetMapping("/getAuthor/{id}")
-	public AuthorDto getAuthorById(@PathVariable long id) throws ServiceException{
+	public AuthorDto getAuthorById(@PathVariable @Positive long id) throws ServiceException{
 		AuthorDto authorDto = this.authorService.getAuthorById(id);
 		return authorDto;
 	}

@@ -3,6 +3,7 @@ package hu.simplesoft.springtutorial.Biblioteca.controller;
 import java.util.List;
 
 import javax.validation.Valid;
+import javax.validation.constraints.Positive;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.DeleteMapping;
@@ -28,6 +29,9 @@ public class LibraryController {
 	@Autowired
 	private LibraryService libraryService;
 	
+	public LibraryController() {
+	}
+	
 	@PostMapping("/createLibrary")
 	public void createLibrary(@Valid @RequestBody LibraryCreateRequest libraryCreateRequest) throws ServiceException{
 		LibraryDto libraryDto = LibraryRequestMapper.convertCreateRequestToDto(libraryCreateRequest);
@@ -41,12 +45,12 @@ public class LibraryController {
 	}
 	
 	@DeleteMapping("/deleteLibrary/{id}")
-	public void deleteLibrary(@PathVariable long id) throws ServiceException{
+	public void deleteLibrary(@PathVariable @Positive long id) throws ServiceException{
 		this.libraryService.deleteLibrary(id);
 	}
 	
 	@GetMapping("/getLibrary/{id}")
-	public LibraryDto getLibraryById(@PathVariable long id) throws ServiceException{
+	public LibraryDto getLibraryById(@PathVariable @Positive long id) throws ServiceException{
 		LibraryDto libraryDto = this.libraryService.getLibraryById(id);
 		return libraryDto;
 	}

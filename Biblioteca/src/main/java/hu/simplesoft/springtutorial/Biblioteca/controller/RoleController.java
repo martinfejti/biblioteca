@@ -3,6 +3,7 @@ package hu.simplesoft.springtutorial.Biblioteca.controller;
 import java.util.List;
 
 import javax.validation.Valid;
+import javax.validation.constraints.Positive;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.DeleteMapping;
@@ -28,6 +29,9 @@ public class RoleController {
 	@Autowired
 	private RoleService roleService;
 	
+	public RoleController() {
+	}
+	
 	@PostMapping("/createRole")
 	public void createRole(@Valid @RequestBody RoleCreateRequest roleCreateRequest) throws ServiceException{
 		RoleDto roleDto = RoleRequestMapper.convertCreateRequestToDto(roleCreateRequest);
@@ -41,12 +45,12 @@ public class RoleController {
 	}
 	
 	@DeleteMapping("/deleteRole/{id}")
-	public void deleteRole(@PathVariable long id) throws ServiceException{
+	public void deleteRole(@PathVariable @Positive long id) throws ServiceException{
 		this.roleService.deleteRole(id);
 	}
 	
 	@GetMapping("/getRole/{id}")
-	public RoleDto getRoleById(@PathVariable long id) throws ServiceException{
+	public RoleDto getRoleById(@PathVariable @Positive long id) throws ServiceException{
 		RoleDto roleDto = this.roleService.getRoleById(id);
 		return roleDto;
 	}
