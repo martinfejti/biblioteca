@@ -1,4 +1,4 @@
-package hu.simplesoft.springtutorial.Biblioteca.data.util;
+package hu.simplesoft.springtutorial.Biblioteca.controller.exception;
 
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
@@ -11,20 +11,24 @@ import hu.simplesoft.springtutorial.Biblioteca.service.exception.ServiceExceptio
 public class ExceptionController {
 
 	private static final Logger LOGGER = LogManager.getLogger(ExceptionController.class);	
+	private static final String ERR = "Error";
 	
 	@ExceptionHandler(ServiceException.class)
-	public void handleServiceException(ServiceException e) {
+	public ExceptionObject handleServiceException(ServiceException e) {
 		LOGGER.error(ExceptionConstants.ServiceExceptionConstant.SERVICE_EXCEPTION);
+		return new ExceptionObject(ERR);
 	}
 	
 	@ExceptionHandler(RuntimeException.class)
-	public void handleRuntimeException(RuntimeException e) {
+	public ExceptionObject handleRuntimeException(RuntimeException e) {
 		LOGGER.error(ExceptionConstants.RuntimeExcepitonConstant.RUNTIME_EXCEPTION);
+		return new ExceptionObject(ERR);
 	}
 	
 	@ExceptionHandler(Exception.class)
-	public void handleException(Exception e) {
+	public ExceptionObject handleException(Exception e) {
 		LOGGER.error(ExceptionConstants.ExceptionConstant.EXCEPTION);
+		return new ExceptionObject(ERR);
 	}
 	
 }

@@ -1,4 +1,4 @@
-package hu.simplesoft.springtutorial.Biblioteca.data.util;
+package hu.simplesoft.springtutorial.Biblioteca.controller.exception;
 
 public interface ExceptionConstants {
 
